@@ -1,24 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "Z:\\Desktop\\CMOVProject1\\Server\\Server.csproj": {}
+    "C:\\Users\\craky\\Desktop\\FEUP\\5 Ano\\CMOV\\CMOVProject1\\Server\\Server.csproj": {}
   },
   "projects": {
-    "Z:\\Desktop\\CMOVProject1\\Server\\Server.csproj": {
+    "C:\\Users\\craky\\Desktop\\FEUP\\5 Ano\\CMOV\\CMOVProject1\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "Z:\\Desktop\\CMOVProject1\\Server\\Server.csproj",
+        "projectUniqueName": "C:\\Users\\craky\\Desktop\\FEUP\\5 Ano\\CMOV\\CMOVProject1\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "Z:\\Desktop\\CMOVProject1\\Server\\Server.csproj",
-        "packagesPath": "C:\\Users\\up201607931\\.nuget\\packages\\",
-        "outputPath": "Z:\\Desktop\\CMOVProject1\\Server\\obj\\",
+        "projectPath": "C:\\Users\\craky\\Desktop\\FEUP\\5 Ano\\CMOV\\CMOVProject1\\Server\\Server.csproj",
+        "packagesPath": "C:\\Users\\craky\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\craky\\Desktop\\FEUP\\5 Ano\\CMOV\\CMOVProject1\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\up201607931\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\craky\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.1"
@@ -57,13 +59,23 @@
               "target": "Package",
               "version": "[2.1.0, )",
               "autoReferenced": true
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[4.1.1, )"
             }
           },
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
