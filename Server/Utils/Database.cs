@@ -1,10 +1,11 @@
 ﻿using Npgsql;
+using System;
 
 namespace Server.Utils
 {
     public class Database
     {
-        public static Database DB = new Database("localhost", 5432, "cmov", "cmov", "CMOVDB");
+        public static Database DB = new Database("localhost", 5432, "cmov", "cmov", "cmovdb");
 
         private string hostname;
         private int port = 5432;
@@ -34,6 +35,7 @@ namespace Server.Utils
             this.username = username;
             this.password = password;
             this.database = database;
+            this.ConnectToDatabase();
         }
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace Server.Utils
             this.username = username;
             this.password = password;
             this.database = database;
+            this.ConnectToDatabase();
         }
 
         /// <summary>
@@ -73,7 +76,31 @@ namespace Server.Utils
         {
             string connectionString = this.CreateConnectionString();
             this.connection = new NpgsqlConnection(connectionString);
-            this.connection.Open();
+            try
+            {
+                this.connection.Open();
+            } catch (Exception e)
+            {
+                Logger.LogError("Failed to connect to database, reason:" + e.Message, "Database");
+            }
+            this.ValidateConnection();
+        }
+
+        /// <summary>
+        /// Validates wether or not the connection to the database was completed with
+        /// success
+        /// </summary>
+        private void ValidateConnection()
+        {
+            if (this.connection.State == System.Data.ConnectionState.Open)
+            {
+                Logger.LogSuccess("connected to database", "database");
+            }
+            else
+            {
+                Logger.LogError("failed to connect to database", "database");
+                throw new System.Exception("Failed To Connect To Database");
+            }
         }
 
         /// <summary>
