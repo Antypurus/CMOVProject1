@@ -82,6 +82,7 @@ namespace Server.Utils
             } catch (Exception e)
             {
                 Logger.LogError("Failed to connect to database, reason:" + e.Message, "Database");
+                throw new Exception("Failed To Connect to database");
             }
             this.ValidateConnection();
         }
