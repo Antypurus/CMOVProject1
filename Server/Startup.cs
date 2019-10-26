@@ -10,8 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using Npgsql;
-
 namespace Server
 {
     public class Startup
@@ -19,16 +17,6 @@ namespace Server
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Console.WriteLine("Test Start");
-            string host = "localhost";
-            string username = "cmov";
-            string password = "cmov";
-            string database = "cmovdb";
-
-            string connstring = "Host="+host+";Username="+username+";Password="+password+";Database="+database;
-            NpgsqlConnection conn = new NpgsqlConnection(connstring);
-            conn.Open();
-            Console.WriteLine(conn.State);
         }
 
         public IConfiguration Configuration { get; }
