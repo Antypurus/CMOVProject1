@@ -72,7 +72,7 @@ namespace Server.Utils
             connString += "Port=" + this.port + ";";
             connString += "Database=" + this.database + ";";
             connString += "Username=" + this.username + ";";
-            connString += "Password=" + this.password + ";";
+            connString += "Password=" + this.password + ";Pooling=False;";
             return connString;
         }
 
@@ -142,7 +142,7 @@ namespace Server.Utils
         /// <param name="query"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public Dictionary<string, object> InsertWithReturn(string query, List<Entry>values)
+        public Object InsertWithReturn(string query, List<Entry>values)
         {
             Dictionary<string, object> results = new Dictionary<string, object>();
             NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
@@ -151,14 +151,7 @@ namespace Server.Utils
                 command.Parameters.AddWithValue(entry.name, entry.value);
             }
 
-            NpgsqlDataReader reader = command.ExecuteReader();
-            for (int i = 0; i < reader.FieldCount; ++i)
-            {
-                string collumnName = reader.GetDataTypeName(i);
-                object value = reader.GetValue(i);
-                results.Add(collumnName, value);
-            }
-            return results;
+            return command.ExecuteScalar();       
         }
 
         /// <summary>
@@ -167,9 +160,9 @@ namespace Server.Utils
         /// <param name="query"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public Dictionary<string, object> Select(string query, List<Entry>values)
+        public List<Dictionary<string, object>> Select(string query, List<Entry>values)
         {
-            Dictionary<string,object> results = new Dictionary<string, object>();
+            List<Dictionary<string, object>> results = new List<Dictionary<string, object>>();
             NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
             foreach (Entry entry in values)
             {
@@ -177,12 +170,19 @@ namespace Server.Utils
             }
             
             NpgsqlDataReader reader = command.ExecuteReader();
-            for(int i = 0;i < reader.FieldCount;++i)
+            Logger.LogError(""+reader.FieldCount,"database");
+            while(reader.Read())
             {
-                string collumnName = reader.GetDataTypeName(i);
-                object value = reader.GetValue(i);
-                results.Add(collumnName, value);
+                Dictionary<string, object> row = new Dictionary<string, object>();
+                for (int i=0;i<reader.FieldCount;++i)
+                {
+                    string name = reader.GetName(i);
+                    object value = reader[i];
+                    row.Add(name, value);
+                }
+                results.Add(row);
             }
+            reader.Close();
             return results;
         }
 

@@ -20,11 +20,13 @@ namespace Server.Controllers
         }
 
         [HttpGet("test")]
-        public bool insert_test()
+        public List<Dictionary<string,object>> insert_test()
         {
             List<Entry> values = new List<Entry>();
-            values.Add(new Entry { name = "p", value = 5 });
-            return Database.GetDatabase().Insert("insert into test(val) values(@p)", values);
+            //values.Add(new Entry { name = "e", value = 1 });
+            //values.Add(new Entry { name = "c", value = 2 });
+            //values.Add(new Entry { name = "n", value = "choura" });
+            return Database.GetDatabase().Select("select * from Product;", values);
         }
     }
 }
