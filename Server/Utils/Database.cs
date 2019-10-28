@@ -1,8 +1,15 @@
 ﻿using Npgsql;
 using System;
+using System.Collections.Generic;
 
 namespace Server.Utils
 {
+    public struct Entry
+    {
+        public string name;
+        public Object value;
+    }
+
     public class Database
     {
         public static Database DB = new Database("localhost", 5432, "cmov", "cmov", "cmovdb");
@@ -110,6 +117,17 @@ namespace Server.Utils
         public void CloseConnection()
         {
             this.connection.Close();
+        }
+
+        public bool Insert(string query, List<Entry>values)
+        {
+            NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
+            foreach(Entry entry in values)
+            {
+                command.Parameters.AddWithValue(entry.name, entry.value);
+            }
+            int res = command.ExecuteNonQuery();
+            return res > 0;
         }
 
     }
