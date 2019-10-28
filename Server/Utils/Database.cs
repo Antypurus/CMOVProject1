@@ -119,6 +119,12 @@ namespace Server.Utils
             this.connection.Close();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public bool Insert(string query, List<Entry>values)
         {
             NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
@@ -128,6 +134,56 @@ namespace Server.Utils
             }
             int res = command.ExecuteNonQuery();
             return res > 0;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public Dictionary<string, object> InsertWithReturn(string query, List<Entry>values)
+        {
+            Dictionary<string, object> results = new Dictionary<string, object>();
+            NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
+            foreach (Entry entry in values)
+            {
+                command.Parameters.AddWithValue(entry.name, entry.value);
+            }
+
+            NpgsqlDataReader reader = command.ExecuteReader();
+            for (int i = 0; i < reader.FieldCount; ++i)
+            {
+                string collumnName = reader.GetDataTypeName(i);
+                object value = reader.GetValue(i);
+                results.Add(collumnName, value);
+            }
+            return results;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public Dictionary<string, object> Select(string query, List<Entry>values)
+        {
+            Dictionary<string,object> results = new Dictionary<string, object>();
+            NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
+            foreach (Entry entry in values)
+            {
+                command.Parameters.AddWithValue(entry.name, entry.value);
+            }
+            
+            NpgsqlDataReader reader = command.ExecuteReader();
+            for(int i = 0;i < reader.FieldCount;++i)
+            {
+                string collumnName = reader.GetDataTypeName(i);
+                object value = reader.GetValue(i);
+                results.Add(collumnName, value);
+            }
+            return results;
         }
 
     }
