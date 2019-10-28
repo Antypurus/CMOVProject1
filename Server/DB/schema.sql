@@ -17,14 +17,14 @@ create table Client(
 drop table if exists Voucher cascade;
 create table Voucher(
 	id uuid primary key default uuid_generate_v4(),
-	user uuid not null REFERENCES Client(id),
+	client uuid not null REFERENCES Client(id),
 	was_used BOOLEAN not null DEFAULT FALSE
 );
 
 drop table if exists Purchase cascade;
 create table Purchase(
 	id uuid primary key default uuid_generate_v4(),
-	user uuid not null REFERENCES Client(id),
+	client uuid not null REFERENCES Client(id),
 	voucher uuid REFERENCES Voucher(id) DEFAULT NULL,
 	should_discount BOOLEAN not null DEFAULT false
 );
