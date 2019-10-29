@@ -18,6 +18,7 @@ namespace Server
         public Startup(IConfiguration configuration)
         {
             Database db = Database.GetDatabase();
+            RSAEncrypter rsa = RSAEncrypter.GetRSAEncrypter();
             Configuration = configuration;
         }
 

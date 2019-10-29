@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Xml.Serialization;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Security.Cryptography;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -11,24 +13,53 @@ namespace Server.Utils
 {
     public class RSAEncrypter
     {
+        private static RSAEncrypter Instance = new RSAEncrypter("./Keys/PrivateKey.pem", "./Keys/PublicKey.pem");
+
         private RSACryptoServiceProvider PrivateKey;
         private RSACryptoServiceProvider PublicKey;
 
         private string PEMPrivateKey;
         private string PEMPublicKey;
 
-        public RSAEncrypter(string privateKeyFile, string publicKeyFile)
+        public static RSAEncrypter GetRSAEncrypter()
+        {
+            return Instance;
+        }
+
+        private RSAEncrypter(string privateKeyFile, string publicKeyFile)
         {
             PEMPrivateKey = File.ReadAllText(privateKeyFile);
             PEMPublicKey = File.ReadAllText(publicKeyFile);
-            PublicKey = ImportPublicKey(this.PEMPublicKey);
+            Logger.LogInfo(PEMPrivateKey,"RSA");
+            Logger.LogInfo(PEMPublicKey,"RSA");
+            PublicKey = ImportPublicKey(PEMPublicKey);
             PrivateKey = ImportPrivateKey(PEMPrivateKey);
         }
-        
-        public static string GenerateRSAPublicPrivateKeyPair(int bits=512)
+
+        public string GetPEMPublicKey()
         {
-            RSACryptoServiceProvider KeyGenerator = new RSACryptoServiceProvider(bits);
-            return RSAEncrypter.ExportPublicKey(KeyGenerator);
+            return this.PEMPublicKey;
+        }
+
+        public string GetPEMPrivateKey()
+        {
+            return this.PEMPrivateKey;
+        }
+
+        public string Encrypt(string data)
+        {
+            byte[] byteFormatData = Encoding.Unicode.GetBytes(data);
+            byte[] encryptedData = PublicKey.Encrypt(byteFormatData, false);
+            string encryptedString = Encoding.Unicode.GetString(encryptedData);
+            return encryptedString;
+        }
+
+        public string Decrypt(string data)
+        {
+            byte[] byteFormatData = Encoding.Unicode.GetBytes(data);
+            byte[] decryptedData = PrivateKey.Decrypt(byteFormatData, false);
+            string decryptedString = Encoding.Unicode.GetString(decryptedData);
+            return decryptedString;
         }
 
         // From Here On Out This Is NOT MY CODE

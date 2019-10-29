@@ -22,7 +22,9 @@ namespace Server.Controllers
         [HttpGet("test")]
         public string insert_test()
         {
-            return RSAEncrypter.ImportPrivateKey("").ToXmlString(false);
+            string encrypted = RSAEncrypter.GetRSAEncrypter().Encrypt("data");
+            string decrypted = RSAEncrypter.GetRSAEncrypter().Decrypt(encrypted);
+            return "Encrypted="+encrypted+"\n\nDecrypted="+decrypted;
         }
     }
 }
