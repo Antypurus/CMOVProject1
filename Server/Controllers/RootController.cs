@@ -20,13 +20,9 @@ namespace Server.Controllers
         }
 
         [HttpGet("test")]
-        public List<Dictionary<string,object>> insert_test()
+        public string insert_test()
         {
-            List<Entry> values = new List<Entry>();
-            //values.Add(new Entry { name = "e", value = 1 });
-            //values.Add(new Entry { name = "c", value = 2 });
-            //values.Add(new Entry { name = "n", value = "choura" });
-            return Database.GetDatabase().Select("select * from Product;", values);
+            return RSAEncrypter.ImportPrivateKey("").ToXmlString(false);
         }
     }
 }
