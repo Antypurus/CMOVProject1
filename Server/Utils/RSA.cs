@@ -29,9 +29,7 @@ namespace Server.Utils
         private RSAEncrypter(string privateKeyFile, string publicKeyFile)
         {
             PEMPrivateKey = File.ReadAllText(privateKeyFile);
-            PEMPublicKey = File.ReadAllText(publicKeyFile);
-            Logger.LogInfo(PEMPrivateKey,"RSA");
-            Logger.LogInfo(PEMPublicKey,"RSA");
+            PEMPublicKey = File.ReadAllText(publicKeyFile);           
             PublicKey = ImportPublicKey(PEMPublicKey);
             PrivateKey = ImportPrivateKey(PEMPrivateKey);
         }
@@ -50,13 +48,13 @@ namespace Server.Utils
         {
             byte[] byteFormatData = Encoding.Unicode.GetBytes(data);
             byte[] encryptedData = PublicKey.Encrypt(byteFormatData, false);
-            string encryptedString = Encoding.Unicode.GetString(encryptedData);
+            string encryptedString = Convert.ToBase64String(encryptedData);
             return encryptedString;
         }
 
         public string Decrypt(string data)
         {
-            byte[] byteFormatData = Encoding.Unicode.GetBytes(data);
+            byte[] byteFormatData = Convert.FromBase64String(data);
             byte[] decryptedData = PrivateKey.Decrypt(byteFormatData, false);
             string decryptedString = Encoding.Unicode.GetString(decryptedData);
             return decryptedString;
