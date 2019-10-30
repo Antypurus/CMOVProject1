@@ -66,7 +66,7 @@ namespace Server.Utils
         /// </summary>
         /// <param name="pem"></param>
         /// <returns></returns>
-        public static RSACryptoServiceProvider ImportPrivateKey(string pem)
+        private static RSACryptoServiceProvider ImportPrivateKey(string pem)
         {
             PemReader pr = new PemReader(new StringReader(pem));
             AsymmetricCipherKeyPair KeyPair = (AsymmetricCipherKeyPair)pr.ReadObject();
@@ -82,7 +82,7 @@ namespace Server.Utils
         /// </summary>
         /// <param name="pem"></param>
         /// <returns></returns>
-        public static RSACryptoServiceProvider ImportPublicKey(string pem)
+        private static RSACryptoServiceProvider ImportPublicKey(string pem)
         {
             PemReader pr = new PemReader(new StringReader(pem));
             AsymmetricKeyParameter publicKey = (AsymmetricKeyParameter)pr.ReadObject();
@@ -99,7 +99,7 @@ namespace Server.Utils
         /// </summary>
         /// <param name="csp"></param>
         /// <returns></returns>
-        public static string ExportPrivateKey(RSACryptoServiceProvider csp)
+        private static string ExportPrivateKey(RSACryptoServiceProvider csp)
         {
             StringWriter outputStream = new StringWriter();
             if (csp.PublicOnly) throw new ArgumentException("CSP does not contain a private key", "csp");
@@ -146,7 +146,7 @@ namespace Server.Utils
         /// </summary>
         /// <param name="csp"></param>
         /// <returns></returns>
-        public static string ExportPublicKey(RSACryptoServiceProvider csp)
+        private static string ExportPublicKey(RSACryptoServiceProvider csp)
         {
             StringWriter outputStream = new StringWriter();
             var parameters = csp.ExportParameters(false);
