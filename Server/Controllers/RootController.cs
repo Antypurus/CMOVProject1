@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Server.Utils;
 
 namespace Server.Controllers
@@ -19,12 +20,12 @@ namespace Server.Controllers
             return "Alive";
         }
 
-        [HttpGet("test")]
-        public string insert_test()
+        [HttpPost("test")]
+        public string test([FromBody]JObject data)
         {
-            string encrypted = RSAEncrypter.GetRSAEncrypter().Encrypt("data");
-            string decrypted = RSAEncrypter.GetRSAEncrypter().Decrypt(encrypted);
-            return "Encrypted="+encrypted+"\n\nDecrypted="+decrypted;
+            string name = data["name"].ToObject<string>();
+            string job = data["job"].ToString();
+            return name+job;
         }
     }
 }

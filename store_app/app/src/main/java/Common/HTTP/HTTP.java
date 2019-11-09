@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -99,7 +101,7 @@ public class HTTP {
                     URL url = new URL((String) objects[0]);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("POST");
-                    connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+                    connection.setRequestProperty("Content-Type","application/json");
                     if(headers!=null) // there are headers to include in the request
                     {
                         for(Map.Entry<String, String> entry : headers.entrySet())
@@ -112,17 +114,14 @@ public class HTTP {
                     if(body!=null)
                     {
                         String bodyData = "";
-                        boolean first = true;
+                        JSONObject jsonBuilder = new JSONObject();
                         for(Map.Entry<String,String> entry: body.entrySet())
                         {
                             String property = entry.getKey();
                             String value = entry.getValue();
-                            if(first) {
-                                bodyData += property + "=" + value;
-                            } else {
-                                bodyData += "&"+property + "=" + value;
-                            }
+                            jsonBuilder.put(property,value);
                         }
+                        bodyData = jsonBuilder.toString();
                         connection.setDoOutput(true);
                         connection.getOutputStream().write(bodyData.getBytes());
                     }

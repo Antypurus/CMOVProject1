@@ -30,4 +30,5 @@ dependencies {
     compile group: 'com.google.zxing', name: 'core', version: '3.4.0'
     compile group: 'com.google.zxing', name: 'android-integration', version: '3.3.0'
     compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.64'
+    compile group: 'org.json', name: 'json', version: '20190722'
 }

@@ -12693,11 +12693,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\craky\\Desktop\\FEUP\\5 Ano\\CMOV\\CMOVProject1\\Server\\Server.csproj",
+      "projectUniqueName": "C:\\Users\\craky\\Desktop\\CMOVProject1\\Server\\Server.csproj",
       "projectName": "Server",
-      "projectPath": "C:\\Users\\craky\\Desktop\\FEUP\\5 Ano\\CMOV\\CMOVProject1\\Server\\Server.csproj",
+      "projectPath": "C:\\Users\\craky\\Desktop\\CMOVProject1\\Server\\Server.csproj",
       "packagesPath": "C:\\Users\\craky\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\craky\\Desktop\\FEUP\\5 Ano\\CMOV\\CMOVProject1\\Server\\obj\\",
+      "outputPath": "C:\\Users\\craky\\Desktop\\CMOVProject1\\Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",

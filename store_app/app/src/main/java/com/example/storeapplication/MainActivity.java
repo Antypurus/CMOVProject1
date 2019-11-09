@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.google.zxing.WriterException;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import Common.HTTP.HTTP;
 import Common.HTTP.HTTPResultHandler;
@@ -40,14 +41,17 @@ public class MainActivity extends QRActivity {
         });
 
         try {
-            HTTP.GetRequest("google.com", null, new HTTPResultHandler() {
+            HashMap<String,String> body = new HashMap<>();
+            body.put("name","puta oliveira");
+            body.put("job","puta duh");
+            HTTP.PostRequest("10.0.0.5/test", null,body, new HTTPResultHandler() {
                 @Override
                 public void Handler(Object result) {
                     TextView text = findViewById(R.id.decode);
                     text.setText((String)result);
                 }
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
