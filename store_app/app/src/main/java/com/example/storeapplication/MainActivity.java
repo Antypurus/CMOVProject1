@@ -1,41 +1,21 @@
 package com.example.storeapplication;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-import com.google.zxing.qrcode.QRCodeWriter;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
 
-import Common.QR;
-import Common.QRActivity;
-import Common.QRReadResultHandler;
-import Common.RSA;
+import Common.HTTP.HTTP;
+import Common.HTTP.HTTPResultHandler;
+import Common.QR.QR;
+import Common.QR.QRActivity;
+import Common.QR.QRReadResultHandler;
 
 public class MainActivity extends QRActivity {
 
@@ -58,7 +38,18 @@ public class MainActivity extends QRActivity {
                 QRCodeReader.StartQRScanner(current, (QRReadResultHandler) current);
             }
         });
-        TextView text = findViewById(R.id.decode);
+
+        try {
+            HTTP.GetRequest("google.com", null, new HTTPResultHandler() {
+                @Override
+                public void Handler(Object result) {
+                    TextView text = findViewById(R.id.decode);
+                    text.setText((String)result);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -66,5 +57,6 @@ public class MainActivity extends QRActivity {
         TextView text = findViewById(R.id.decode);
         text.setText(data);
     }
+
 }
 

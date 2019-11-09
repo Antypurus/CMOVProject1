@@ -1,4 +1,4 @@
-package Common;
+package Common.QR;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package Common;
+package Common.QR;
 
 import android.app.Activity;
 import android.app.Application;
