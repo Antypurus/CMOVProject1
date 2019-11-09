@@ -15,6 +15,13 @@ import java.util.Map;
 
 public class HTTP {
 
+    /**
+     *
+     * @param urlString
+     * @param headers
+     * @param handler
+     * @throws IOException
+     */
     public static void GetRequest(String urlString, final HashMap<String,String> headers, final HTTPResultHandler handler) throws IOException {
         if(!urlString.contains("http://") && !urlString.contains("https://"))
         {
@@ -71,6 +78,13 @@ public class HTTP {
         asyncTask.execute(new Object[]{urlString});
     }
 
+    /**
+     *
+     * @param urlString
+     * @param headers
+     * @param body
+     * @param handler
+     */
     public static void PostRequest(String urlString, final HashMap<String,String>headers, final HashMap<String,String> body, final HTTPResultHandler handler)
     {
         if(!urlString.contains("http://") && !urlString.contains("https://"))
