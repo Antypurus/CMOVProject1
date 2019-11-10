@@ -63,7 +63,6 @@ namespace Server.Controllers
                 string productJSONString = jsonProduct.ToString();
 
                 productJSONString = RSAEncrypter.GetRSAEncrypter().Encrypt(productJSONString);
-                Logger.LogInfo(RSAEncrypter.GetRSAEncrypter().Decrypt(productJSONString),"root");
                 JObject encryptedProduct = new JObject();
                 encryptedProduct.Add("product",productJSONString);
                 encryptedProductList.Add(encryptedProduct);

@@ -50,7 +50,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ProductListHolder holder, int position) {
-        holder.productPrice.setText(products.get(position).getPriceEuro()+"."+products.get(position).getPriceCent());
+        float price = products.get(position).getPriceEuro() + products.get(position).getPriceCent()/100.0f;
+        holder.productPrice.setText(""+price+"€");
         holder.productName.setText(products.get(position).getProductName());
     }
 
