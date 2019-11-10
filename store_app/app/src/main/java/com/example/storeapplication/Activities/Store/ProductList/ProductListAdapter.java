@@ -1,5 +1,6 @@
 package com.example.storeapplication.Activities.Store.ProductList;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.storeapplication.Activities.Store.ProductView.ProductViewActivity;
 import com.example.storeapplication.R;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
         public TextView productName;
         public TextView productPrice;
+        public Product product;
 
         public ProductListHolder(@NonNull ConstraintLayout layout) {
             super(layout);
@@ -49,15 +52,24 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductListHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ProductListHolder holder, int position) {
+        holder.product = products.get(position);
         float price = products.get(position).getPriceEuro() + products.get(position).getPriceCent()/100.0f;
         holder.productPrice.setText(""+price+"€");
         holder.productName.setText(products.get(position).getProductName());
+        holder.layout.setOnClickListener(view -> goToProduct(holder.product,holder.layout));
     }
 
     @Override
     public int getItemCount() {
         return this.products.size();
+    }
+
+    public void goToProduct(Product product, View view)
+    {
+        Intent intent = new Intent(view.getContext(), ProductViewActivity.class);
+        intent.putExtra("product",product);
+        view.getContext().startActivity(intent);
     }
 
 }

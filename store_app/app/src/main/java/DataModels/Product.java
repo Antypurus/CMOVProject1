@@ -4,9 +4,13 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import Common.RSA;
 
-public class Product {
+public class Product implements Serializable {
+
+    private String RAWJSON;
 
     private String productID;
     private String productName;
@@ -15,7 +19,7 @@ public class Product {
 
     public Product(String data, String key) throws Exception {
         String product = RSA.Decrypt(data,key);
-        Log.d("Product",product);
+        this.RAWJSON = product;
         JSONObject JSONproduct = new JSONObject(product);
         this.productID = JSONproduct.getString("id");
         this.productName = JSONproduct.getString("name");
@@ -37,5 +41,9 @@ public class Product {
 
     public String getProductID() {
         return productID;
+    }
+
+    public String getRAWJSON() {
+        return RAWJSON;
     }
 }
