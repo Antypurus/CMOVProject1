@@ -22,14 +22,17 @@ namespace Server.Controllers
         }
 
         [HttpPost("register")]
-        public Guid register([FromBody]JObject data)
+        public JObject register([FromBody]JObject data)
         {
             string name = data["name"].ToString();
             string username = data["username"].ToString();
             string password = data["password"].ToString();
             int credit = data["credit_card_no"].ToObject<int>();
             string key = data["public_key"].ToString();
-            return Client.RegisterUser(name,username,password,key,credit).GetClientID();
+            JObject ret = new JObject();
+            ret.Add("user_id",Client.RegisterUser(name,username,password,key,credit).GetClientID().ToString());
+            ret.Add("server_key",RSAEncrypter.GetRSAEncrypter().GetPEMPublicKey());
+            return ret;
         }
     }
 }

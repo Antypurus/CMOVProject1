@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import com.google.zxing.WriterException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -52,8 +55,13 @@ public class MainActivity extends QRActivity {
             HTTP.PostRequest("10.0.0.5/register", null,body, new HTTPResultHandler() {
                 @Override
                 public void Handler(Object result) {
-                    TextView text = findViewById(R.id.decode);
-                    text.setText((String)result);
+                    try {
+                        JSONObject response = new JSONObject((String) result);
+                        TextView text = findViewById(R.id.decode);
+                        text.setText(response.getString("server_key"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } catch (Exception e) {
