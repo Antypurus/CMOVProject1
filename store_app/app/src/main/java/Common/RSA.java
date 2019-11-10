@@ -1,9 +1,13 @@
 package Common;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.SequenceInputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -12,7 +16,6 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.UnrecoverableEntryException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 import android.app.Activity;
@@ -24,8 +27,14 @@ import android.util.Log;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.RSAPrivateKeySpec;
+import java.util.Enumeration;
 
+import org.bouncycastle.asn1.ASN1Integer;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DERInteger;
 import org.bouncycastle.util.encoders.Base64;
+import org.bouncycastle.util.io.pem.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -58,7 +67,6 @@ public class RSA {
     }
 
     /**
-     *
      * @return
      * @throws KeyStoreException
      * @throws NoSuchAlgorithmException
@@ -73,7 +81,6 @@ public class RSA {
     }
 
     /**
-     *
      * @param data
      * @return
      * @throws NoSuchPaddingException
@@ -98,7 +105,6 @@ public class RSA {
     }
 
     /**
-     *
      * @param data
      * @return
      * @throws KeyStoreException
@@ -120,6 +126,47 @@ public class RSA {
         cipher.init(Cipher.DECRYPT_MODE, pri);
         byte[] decryptedData = cipher.doFinal(Base64.decode(data));
         return new String(decryptedData);
+    }
+
+    public static String Decrypt(String data, String key) throws Exception {
+        key = key.replaceAll("\\n", "").replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                .replace("-----END RSA PRIVATE KEY-----", "");
+        byte[] encodedPrivateKey  = Base64.decode(key);
+
+        try {
+            ASN1Sequence primitive = (ASN1Sequence) ASN1Sequence
+                    .fromByteArray(encodedPrivateKey);
+            Enumeration<?> e = primitive.getObjects();
+            BigInteger v = ((ASN1Integer) e.nextElement()).getValue();
+
+            int version = v.intValue();
+            if (version != 0 && version != 1) {
+                throw new IllegalArgumentException("wrong version for RSA private key");
+            }
+            /**
+             * In fact only modulus and private exponent are in use.
+             */
+            BigInteger modulus = ((ASN1Integer) e.nextElement()).getValue();
+            BigInteger publicExponent = ((ASN1Integer) e.nextElement()).getValue();
+            BigInteger privateExponent = ((ASN1Integer) e.nextElement()).getValue();
+            BigInteger prime1 = ((ASN1Integer) e.nextElement()).getValue();
+            BigInteger prime2 = ((ASN1Integer) e.nextElement()).getValue();
+            BigInteger exponent1 = ((ASN1Integer) e.nextElement()).getValue();
+            BigInteger exponent2 = ((ASN1Integer) e.nextElement()).getValue();
+            BigInteger coefficient = ((ASN1Integer) e.nextElement()).getValue();
+
+            RSAPrivateKeySpec spec = new RSAPrivateKeySpec(modulus, privateExponent);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            PrivateKey pk = kf.generatePrivate(spec);
+
+            final Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.DECRYPT_MODE, pk);
+            byte[] decryptedData = cipher.doFinal(Base64.decode(data));
+            return new String(decryptedData, StandardCharsets.UTF_16LE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

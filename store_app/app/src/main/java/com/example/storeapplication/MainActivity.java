@@ -1,26 +1,13 @@
 package com.example.storeapplication;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.zxing.WriterException;
+import com.example.storeapplication.Activities.Store.ProductList.ProductListActivity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.HashMap;
-
-import Common.HTTP.HTTP;
-import Common.HTTP.HTTPResultHandler;
-import Common.QR.QR;
 import Common.QR.QRActivity;
-import Common.QR.QRReadResultHandler;
-import Common.RSA;
 
 public class MainActivity extends QRActivity {
 
@@ -29,6 +16,9 @@ public class MainActivity extends QRActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = new Intent(this, ProductListActivity.class);
+        startActivity(intent);
+        /*
         ImageView image = (ImageView) findViewById(R.id.image);
         try {
             image.setImageBitmap(QR.GenerateQRCode("testing"));
@@ -67,6 +57,7 @@ public class MainActivity extends QRActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
     }
 
     @Override
