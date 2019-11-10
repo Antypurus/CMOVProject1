@@ -52,10 +52,26 @@ namespace Server.Utils
             return encryptedString;
         }
 
+        public string EncryptWithPrivateKey(string data)
+        {
+            byte[] byteFormatData = Encoding.Unicode.GetBytes(data);
+            byte[] encryptedData = PrivateKey.Encrypt(byteFormatData, false);
+            string encryptedString = Convert.ToBase64String(encryptedData);
+            return encryptedString;
+        }
+
         public string Decrypt(string data)
         {
             byte[] byteFormatData = Convert.FromBase64String(data);
             byte[] decryptedData = PrivateKey.Decrypt(byteFormatData, false);
+            string decryptedString = Encoding.Unicode.GetString(decryptedData);
+            return decryptedString;
+        }
+
+        public string DecryptWithPublicKey(string data)
+        {
+            byte[] byteFormatData = Convert.FromBase64String(data);
+            byte[] decryptedData = PublicKey.Decrypt(byteFormatData, false);
             string decryptedString = Encoding.Unicode.GetString(decryptedData);
             return decryptedString;
         }

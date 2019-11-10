@@ -46,13 +46,13 @@ public class MainActivity extends QRActivity {
 
         try {
             RSA.GeneratePublicPrivateKeyPair(this);
-            HashMap<String,String> body = new HashMap<>();
-            body.put("name","name");
-            body.put("username","username");
-            body.put("password","password");
-            body.put("credit_card_no","1234");
-            body.put("public_key",RSA.getPublicKey());
-            HTTP.PostRequest("10.0.0.5/register", null,body, new HTTPResultHandler() {
+            HashMap<String, String> body = new HashMap<>();
+            body.put("name", "name");
+            body.put("username", "username");
+            body.put("password", "password");
+            body.put("credit_card_no", "1234");
+            body.put("public_key", RSA.getPublicKey());
+            HTTP.PostRequest("10.0.0.5/register", null, body, new HTTPResultHandler() {
                 @Override
                 public void Handler(Object result) {
                     try {

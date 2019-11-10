@@ -14,6 +14,10 @@ namespace Server.Controllers
     [ApiController]
     public class RootController : ControllerBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("status")]
         [HttpGet("heartbeat")]
         public string HeartBeat()
@@ -21,6 +25,11 @@ namespace Server.Controllers
             return "Alive";
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public JObject register([FromBody]JObject data)
         {
@@ -33,6 +42,38 @@ namespace Server.Controllers
             ret.Add("user_id",Client.RegisterUser(name,username,password,key,credit).GetClientID().ToString());
             ret.Add("server_key",RSAEncrypter.GetRSAEncrypter().GetPEMPublicKey());
             return ret;
+        }
+
+        /// <summary>
+        /// Return the product list as well as the decryption key necessary to get the product data
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("products")]
+        public JObject products()
+        {
+            List<Product> productList = Product.GetProducts();
+            List<JObject> encryptedProductList = new List<JObject>();
+            foreach(Product product in productList)
+            {
+                JObject jsonProduct = new JObject();
+                jsonProduct.Add("id",product.GetProductID().ToString());
+                jsonProduct.Add("name",product.GetProductName());
+                jsonProduct.Add("price_euros",product.GetPriceEuros());
+                jsonProduct.Add("price_cents",product.GetPriceCents());
+                jsonProduct.Add("image_url",product.GetProductImageURL());
+                string productJSONString = jsonProduct.ToString();
+
+                productJSONString = RSAEncrypter.GetRSAEncrypter().EncryptWithPrivateKey(productJSONString);
+                JObject encryptedProduct = new JObject();
+                encryptedProduct.Add("product",productJSONString);
+                encryptedProductList.Add(encryptedProduct);
+            }
+            JArray jArray = new JArray();
+            JArray.FromObject(encryptedProductList);
+            JObject response = new JObject();
+            response.Add("products",jArray);
+            response.Add("key",RSAEncrypter.GetRSAEncrypter().GetPEMPublicKey());
+            return response;
         }
     }
 }

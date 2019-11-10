@@ -86,7 +86,8 @@ namespace Server.Utils
             try
             {
                 this.connection.Open();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Logger.LogError("Failed to connect to database, reason:" + e.Message, "Database");
                 throw new Exception("Failed To Connect to database");
@@ -125,10 +126,10 @@ namespace Server.Utils
         /// <param name="query"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public bool Insert(string query, List<Entry>values)
+        public bool Insert(string query, List<Entry> values)
         {
             NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
-            foreach(Entry entry in values)
+            foreach (Entry entry in values)
             {
                 command.Parameters.AddWithValue(entry.name, entry.value);
             }
@@ -142,7 +143,7 @@ namespace Server.Utils
         /// <param name="query"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public Object InsertWithReturn(string query, List<Entry>values)
+        public Object InsertWithReturn(string query, List<Entry> values)
         {
             Dictionary<string, object> results = new Dictionary<string, object>();
             NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
@@ -151,7 +152,7 @@ namespace Server.Utils
                 command.Parameters.AddWithValue(entry.name, entry.value);
             }
 
-            return command.ExecuteScalar();       
+            return command.ExecuteScalar();
         }
 
         /// <summary>
@@ -160,7 +161,7 @@ namespace Server.Utils
         /// <param name="query"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public List<Dictionary<string, object>> Select(string query, List<Entry>values)
+        public List<Dictionary<string, object>> Select(string query, List<Entry> values)
         {
             List<Dictionary<string, object>> results = new List<Dictionary<string, object>>();
             NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
@@ -168,17 +169,24 @@ namespace Server.Utils
             {
                 command.Parameters.AddWithValue(entry.name, entry.value);
             }
-            
+
             NpgsqlDataReader reader = command.ExecuteReader();
-            Logger.LogError(""+reader.FieldCount,"database");
-            while(reader.Read())
+            Logger.LogError("" + reader.FieldCount, "database");
+            while (reader.Read())
             {
                 Dictionary<string, object> row = new Dictionary<string, object>();
-                for (int i=0;i<reader.FieldCount;++i)
+                for (int i = 0; i < reader.FieldCount; ++i)
                 {
                     string name = reader.GetName(i);
-                    object value = reader[i];
-                    row.Add(name, value);
+                    if (reader.IsDBNull(i))
+                    {
+                        row.Add(name, null);
+                    }
+                    else
+                    {
+                        object value = reader[i];
+                        row.Add(name, value);
+                    }
                 }
                 results.Add(row);
             }
