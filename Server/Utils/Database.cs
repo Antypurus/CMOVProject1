@@ -171,7 +171,6 @@ namespace Server.Utils
             }
 
             NpgsqlDataReader reader = command.ExecuteReader();
-            Logger.LogError("" + reader.FieldCount, "database");
             while (reader.Read())
             {
                 Dictionary<string, object> row = new Dictionary<string, object>();

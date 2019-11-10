@@ -71,7 +71,7 @@ namespace Server.Utils
         public string DecryptWithPublicKey(string data)
         {
             byte[] byteFormatData = Convert.FromBase64String(data);
-            byte[] decryptedData = PublicKey.Decrypt(byteFormatData, false);
+            byte[] decryptedData = PrivateKey.Decrypt(byteFormatData, false);
             string decryptedString = Encoding.Unicode.GetString(decryptedData);
             return decryptedString;
         }

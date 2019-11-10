@@ -52,27 +52,24 @@ namespace Server.Controllers
         public JObject products()
         {
             List<Product> productList = Product.GetProducts();
-            List<JObject> encryptedProductList = new List<JObject>();
+            JArray encryptedProductList = new JArray();
             foreach(Product product in productList)
             {
                 JObject jsonProduct = new JObject();
-                jsonProduct.Add("id",product.GetProductID().ToString());
+                jsonProduct.Add("id",product.GetProductID().ToByteArray());
                 jsonProduct.Add("name",product.GetProductName());
-                jsonProduct.Add("price_euros",product.GetPriceEuros());
-                jsonProduct.Add("price_cents",product.GetPriceCents());
-                jsonProduct.Add("image_url",product.GetProductImageURL());
+                jsonProduct.Add("euros",product.GetPriceEuros());
+                jsonProduct.Add("cents",product.GetPriceCents());
                 string productJSONString = jsonProduct.ToString();
 
-                productJSONString = RSAEncrypter.GetRSAEncrypter().EncryptWithPrivateKey(productJSONString);
+                productJSONString = RSAEncrypter.GetRSAEncrypter().Encrypt(productJSONString);
                 JObject encryptedProduct = new JObject();
                 encryptedProduct.Add("product",productJSONString);
                 encryptedProductList.Add(encryptedProduct);
             }
-            JArray jArray = new JArray();
-            JArray.FromObject(encryptedProductList);
             JObject response = new JObject();
-            response.Add("products",jArray);
-            response.Add("key",RSAEncrypter.GetRSAEncrypter().GetPEMPublicKey());
+            response.Add("products",encryptedProductList);
+            response.Add("key",RSAEncrypter.GetRSAEncrypter().GetPEMPrivateKey());
             return response;
         }
     }
