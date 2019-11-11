@@ -47,10 +47,10 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             RSA.GeneratePublicPrivateKeyPair(this);
             HashMap<String, String> body = new HashMap<>();
-            body.put("name", (String) this.name.getText());
-            body.put("username", (String) this.username.getText());
-            body.put("password", (String) this.password.getText());
-            body.put("credit_card_no", (String) this.credit_card.getText());
+            body.put("name", (String) this.name.getText().toString());
+            body.put("username", (String) this.username.getText().toString());
+            body.put("password", (String) this.password.getText().toString());
+            body.put("credit_card_no", (String) this.credit_card.getText().toString());
             body.put("public_key", RSA.getPublicKey());
             HTTP.PostRequest(Constants.Register_Route, null, body, new HTTPResultHandler() {
                 @Override

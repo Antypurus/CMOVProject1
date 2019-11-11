@@ -20,6 +20,6 @@ namespace Server
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://10.0.0.5:80/");
+                .UseUrls("http://10.227.153.127:5789/");
     }
 }
