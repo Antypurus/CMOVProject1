@@ -52,12 +52,12 @@ namespace Server.Utils
             return encryptedString;
         }
 
-        public string EncryptWithPrivateKey(string data)
+        public string Sign(string data)
         {
             byte[] byteFormatData = Encoding.Unicode.GetBytes(data);
-            byte[] encryptedData = PrivateKey.Encrypt(byteFormatData, false);
-            string encryptedString = Convert.ToBase64String(encryptedData);
-            return encryptedString;
+            byte[] dataHash = PrivateKey.SignData(byteFormatData,HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
+            string hash = Convert.ToBase64String(dataHash);
+            return hash;
         }
 
         public string Decrypt(string data)
@@ -68,12 +68,12 @@ namespace Server.Utils
             return decryptedString;
         }
 
-        public string DecryptWithPublicKey(string data)
+        public bool Verify(string data, string signature)
         {
-            byte[] byteFormatData = Convert.FromBase64String(data);
-            byte[] decryptedData = PrivateKey.Decrypt(byteFormatData, false);
-            string decryptedString = Encoding.Unicode.GetString(decryptedData);
-            return decryptedString;
+            byte[] byteFormatedSignature = Convert.FromBase64String(signature);
+            byte[] byteFormatedData = Encoding.Unicode.GetBytes(data);
+            bool isValid = PrivateKey.VerifyData(byteFormatedData,byteFormatedSignature,HashAlgorithmName.SHA1,RSASignaturePadding.Pkcs1);
+            return isValid;
         }
 
         // From Here On Out This Is NOT MY CODE

@@ -62,7 +62,9 @@ namespace Server.Controllers
                 jsonProduct.Add("cents",product.GetPriceCents());
                 string productJSONString = jsonProduct.ToString();
 
-                productJSONString = RSAEncrypter.GetRSAEncrypter().Encrypt(productJSONString);
+                Logger.LogInfo(""+RSAEncrypter.GetRSAEncrypter().Verify(productJSONString,RSAEncrypter.GetRSAEncrypter().Sign(productJSONString)),"Root");
+
+                productJSONString = RSAEncrypter.GetRSAEncrypter().Sign(productJSONString);
                 JObject encryptedProduct = new JObject();
                 encryptedProduct.Add("product",productJSONString);
                 encryptedProductList.Add(encryptedProduct);
