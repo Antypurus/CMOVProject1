@@ -52,7 +52,7 @@ namespace Server.Controllers
         public JObject products()
         {
             List<Product> productList = Product.GetProducts();
-            JArray encryptedProductList = new JArray();
+            JArray signedProductList = new JArray();
             foreach(Product product in productList)
             {
                 JObject jsonProduct = new JObject();
@@ -62,16 +62,15 @@ namespace Server.Controllers
                 jsonProduct.Add("cents",product.GetPriceCents());
                 string productJSONString = jsonProduct.ToString();
 
-                Logger.LogInfo(""+RSAEncrypter.GetRSAEncrypter().Verify(productJSONString,RSAEncrypter.GetRSAEncrypter().Sign(productJSONString)),"Root");
-
-                productJSONString = RSAEncrypter.GetRSAEncrypter().Sign(productJSONString);
-                JObject encryptedProduct = new JObject();
-                encryptedProduct.Add("product",productJSONString);
-                encryptedProductList.Add(encryptedProduct);
+                string productSignedHash = RSAEncrypter.GetRSAEncrypter().Sign(productJSONString);
+                JObject signedProduct = new JObject();
+                signedProduct.Add("product",productJSONString);
+                signedProduct.Add("sign", productSignedHash);
+                signedProductList.Add(signedProduct);
             }
             JObject response = new JObject();
-            response.Add("products",encryptedProductList);
-            response.Add("key",RSAEncrypter.GetRSAEncrypter().GetPEMPrivateKey());
+            response.Add("products",signedProductList);
+            response.Add("key",RSAEncrypter.GetRSAEncrypter().GetPEMPublicKey());
             return response;
         }
     }

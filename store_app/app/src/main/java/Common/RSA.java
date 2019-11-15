@@ -15,6 +15,8 @@ import java.security.NoSuchProviderException;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 
@@ -26,8 +28,11 @@ import android.util.Log;
 
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Enumeration;
 
 import org.bouncycastle.asn1.ASN1Integer;
@@ -128,10 +133,35 @@ public class RSA {
         return new String(decryptedData);
     }
 
+    public static String Sign(String data) throws NoSuchAlgorithmException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException, InvalidKeyException, SignatureException {
+        KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
+        ks.load(null);
+        KeyStore.Entry entry = ks.getEntry("AuthKey", null);
+        PrivateKey pri = ((KeyStore.PrivateKeyEntry) entry).getPrivateKey();
+        Signature privateSignature = Signature.getInstance("SHA1withRSA");
+        privateSignature.initSign(pri);
+        privateSignature.update(data.getBytes(StandardCharsets.UTF_16LE));
+        byte[] signature = privateSignature.sign();
+        return Base64.toBase64String(signature);
+    }
+
+    public static boolean Verify(String data, String signature, String key) throws NoSuchAlgorithmException, InvalidKeySpecException, SignatureException, InvalidKeyException {
+        key = key.replaceAll("\\n", "").replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "");
+        byte[] encodedPublicKey = Base64.decode(key);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedPublicKey);
+        PublicKey publicKey = (PublicKey)kf.generatePublic(keySpec);
+        Signature publicSignature = Signature.getInstance("SHA1withRSA");
+        publicSignature.initVerify(publicKey);
+        publicSignature.update(data.getBytes(StandardCharsets.UTF_16LE));
+        byte[] signatureBytes = Base64.decode(signature);
+        return  publicSignature.verify(signatureBytes);
+    }
+
     public static String Decrypt(String data, String key) throws Exception {
         key = key.replaceAll("\\n", "").replace("-----BEGIN RSA PRIVATE KEY-----", "")
                 .replace("-----END RSA PRIVATE KEY-----", "");
-        byte[] encodedPrivateKey  = Base64.decode(key);
+        byte[] encodedPrivateKey = Base64.decode(key);
 
         try {
             ASN1Sequence primitive = (ASN1Sequence) ASN1Sequence

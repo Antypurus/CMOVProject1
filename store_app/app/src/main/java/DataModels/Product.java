@@ -18,13 +18,17 @@ public class Product implements Serializable {
     private int priceCent;
 
     public Product(String data, String key) throws Exception {
-        String product = RSA.Decrypt(data,key);
-        this.RAWJSON = product;
-        JSONObject JSONproduct = new JSONObject(product);
-        this.productID = JSONproduct.getString("id");
-        this.productName = JSONproduct.getString("name");
-        this.priceEuro = JSONproduct.getInt("euros");
-        this.priceCent = JSONproduct.getInt("cents");
+        this.RAWJSON = data;
+        JSONObject JSONproduct = new JSONObject(data);
+        String signature = JSONproduct.getString("sign");
+        String rawProduct = JSONproduct.getString("product");
+        if(RSA.Verify(rawProduct,signature,key)) {
+            JSONObject product = new JSONObject(JSONproduct.getString("product"));
+            this.productID = product.getString("id");
+            this.productName = product.getString("name");
+            this.priceEuro = product.getInt("euros");
+            this.priceCent = product.getInt("cents");
+        }
     }
 
     public int getPriceCent() {

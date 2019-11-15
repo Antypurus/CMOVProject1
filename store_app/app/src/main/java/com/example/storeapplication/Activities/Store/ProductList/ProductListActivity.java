@@ -1,6 +1,7 @@
 package com.example.storeapplication.Activities.Store.ProductList;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import Common.Constants;
 import Common.HTTP.HTTP;
 import Common.HTTP.HTTPResultHandler;
 import DataModels.Product;
@@ -32,7 +34,7 @@ public class ProductListActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
 
         try {
-            HTTP.GetRequest("10.0.0.5:80/products", null, new HTTPResultHandler() {
+            HTTP.GetRequest(Constants.Product_List_Route, null, new HTTPResultHandler() {
                 @Override
                 public void Handler(Object result) {
                     try {
@@ -44,8 +46,8 @@ public class ProductListActivity extends AppCompatActivity {
                         ArrayList<Product> products = new ArrayList<>();
                         for(int i=0;i<JSONProds.length();++i)
                         {
-                            JSONObject jsonproduct = new JSONObject(JSONProds.getString(i));
-                            products.add(new Product(jsonproduct.getString("product"),key));
+                            String jsonproduct = JSONProds.getString(i);
+                            products.add(new Product(jsonproduct,key));
                         }
 
                         RecyclerView list = findViewById(R.id.productList);

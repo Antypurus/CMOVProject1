@@ -5,26 +5,23 @@ import android.os.Bundle;
 
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.storeapplication.Activities.Client.RegisterActivity;
 import com.example.storeapplication.Activities.Store.ProductList.ProductListActivity;
 
 import Common.QR.QRActivity;
+import DataModels.Product;
 
-public class MainActivity extends QRActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, RegisterActivity.class);
+        Intent intent = new Intent(this, ProductListActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    public void Handler(String data) {
-        TextView text = findViewById(R.id.decode);
-        text.setText(data);
     }
 
 }
