@@ -2,6 +2,7 @@ package com.example.storeapplication.Activities.Client;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,17 @@ public class AuthMenuActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this,LoginActivity.class);
         this.startActivity(intent);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+            System.exit(0);
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
 }
