@@ -47,12 +47,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void SaveUserData(SharedPreferences preferences,String username, String password, String Key)
+    private void SaveUserData(SharedPreferences preferences,String username, String password, String Key, String UserID)
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("password",password);
         editor.putString("username",username);
         editor.putString("Server_Key",Key);
+        editor.putString("user_id",UserID);
         editor.apply();
     }
 
@@ -85,7 +86,8 @@ public class RegisterActivity extends AppCompatActivity {
                     try {
                         JSONObject response = new JSONObject((String) result);
                         String key = response.getString("server_key");
-                        SaveUserData(sharedPreferences,usernameS,passwordS,key);
+                        String user_id = response.getString("user_id");
+                        SaveUserData(sharedPreferences,usernameS,passwordS,key,user_id);
                         ClientSystem system = new ClientSystem(usernameS);
                         ToMainMenu();
                     } catch (Exception e) {
