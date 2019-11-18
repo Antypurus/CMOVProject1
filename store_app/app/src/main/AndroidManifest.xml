@@ -60,6 +60,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.Client.MainMenuActivity" />
+        <activity android:name=".Activities.Client.AuthMenuActivity" />
+        <activity android:name=".Activities.Client.LoginActivity" />
 
     </application>
 

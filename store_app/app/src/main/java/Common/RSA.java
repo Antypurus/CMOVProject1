@@ -53,16 +53,16 @@ public class RSA {
      * @return
      * @throws NoSuchAlgorithmException
      */
-    public static void GeneratePublicPrivateKeyPair(Activity activity) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, KeyStoreException {
+    public static void GeneratePublicPrivateKeyPair(Activity activity, String username) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, KeyStoreException {
         KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
         Calendar start = new GregorianCalendar();
         Calendar end = new GregorianCalendar();
         end.add(Calendar.YEAR, 20);
         KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA", "AndroidKeyStore");
         AlgorithmParameterSpec spec = new KeyPairGeneratorSpec.Builder(activity)
-                .setAlias("AuthKey")
+                .setAlias(username)
                 .setKeySize(512)
-                .setSubject(new X500Principal("CN=AuthKey"))
+                .setSubject(new X500Principal("CN="+username))
                 .setSerialNumber(BigInteger.valueOf(12121212))
                 .setStartDate(start.getTime())
                 .setEndDate(end.getTime())
@@ -78,10 +78,10 @@ public class RSA {
      * @throws CertificateException
      * @throws IOException
      */
-    public static String getPublicKey() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+    public static String getPublicKey(String username) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
         KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
         keyStore.load(null);
-        PublicKey pubKey = keyStore.getCertificate("AuthKey").getPublicKey();
+        PublicKey pubKey = keyStore.getCertificate(username).getPublicKey();
         return new String(Base64.encode(pubKey.getEncoded()));
     }
 
@@ -98,10 +98,10 @@ public class RSA {
      * @throws InvalidKeyException
      * @throws UnrecoverableEntryException
      */
-    public static String Encrypt(String data) throws NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException, IOException, KeyStoreException, CertificateException, InvalidKeyException, UnrecoverableEntryException {
+    public static String Encrypt(String data,String username) throws NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException, IOException, KeyStoreException, CertificateException, InvalidKeyException, UnrecoverableEntryException {
         KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
         ks.load(null);
-        KeyStore.Entry entry = ks.getEntry("AuthKey", null);
+        KeyStore.Entry entry = ks.getEntry(username, null);
         PublicKey pub = ((KeyStore.PrivateKeyEntry) entry).getCertificate().getPublicKey();
         final Cipher cipher = Cipher.getInstance("RSA/NONE/PKCS1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, pub);
@@ -122,10 +122,10 @@ public class RSA {
      * @throws IllegalBlockSizeException
      * @throws UnrecoverableEntryException
      */
-    public static String Decrypt(String data) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnrecoverableEntryException {
+    public static String Decrypt(String data, String username) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnrecoverableEntryException {
         KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
         ks.load(null);
-        KeyStore.Entry entry = ks.getEntry("AuthKey", null);
+        KeyStore.Entry entry = ks.getEntry(username, null);
         PrivateKey pri = ((KeyStore.PrivateKeyEntry) entry).getPrivateKey();
         final Cipher cipher = Cipher.getInstance("RSA/NONE/PKCS1Padding");
         cipher.init(Cipher.DECRYPT_MODE, pri);
@@ -133,10 +133,10 @@ public class RSA {
         return new String(decryptedData);
     }
 
-    public static String Sign(String data) throws NoSuchAlgorithmException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException, InvalidKeyException, SignatureException {
+    public static String Sign(String data, String username) throws NoSuchAlgorithmException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException, InvalidKeyException, SignatureException {
         KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
         ks.load(null);
-        KeyStore.Entry entry = ks.getEntry("AuthKey", null);
+        KeyStore.Entry entry = ks.getEntry(username, null);
         PrivateKey pri = ((KeyStore.PrivateKeyEntry) entry).getPrivateKey();
         Signature privateSignature = Signature.getInstance("SHA1withRSA");
         privateSignature.initSign(pri);
@@ -158,7 +158,7 @@ public class RSA {
         return  publicSignature.verify(signatureBytes);
     }
 
-    public static String Decrypt(String data, String key) throws Exception {
+    public static String DecryptWithKey(String data, String key) throws Exception {
         key = key.replaceAll("\\n", "").replace("-----BEGIN RSA PRIVATE KEY-----", "")
                 .replace("-----END RSA PRIVATE KEY-----", "");
         byte[] encodedPrivateKey = Base64.decode(key);

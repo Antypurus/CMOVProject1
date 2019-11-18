@@ -3,15 +3,9 @@ package com.example.storeapplication;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.storeapplication.Activities.Client.RegisterActivity;
-import com.example.storeapplication.Activities.Store.ProductList.ProductListActivity;
-
-import Common.QR.QRActivity;
-import DataModels.Product;
+import com.example.storeapplication.Activities.Client.AuthMenuActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, ProductListActivity.class);
+        Intent intent = new Intent(this, AuthMenuActivity.class);
         startActivity(intent);
     }
 

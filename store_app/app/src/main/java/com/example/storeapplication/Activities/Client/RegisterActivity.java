@@ -21,6 +21,7 @@ import Common.Constants;
 import Common.HTTP.HTTP;
 import Common.HTTP.HTTPResultHandler;
 import Common.RSA;
+import DataModels.ClientSystem;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -51,8 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("password",password);
         editor.putString("username",username);
-        editor.putString("Key",Key);
-        editor.commit();
+        editor.putString("Server_Key",Key);
+        editor.apply();
     }
 
     private void ToMainMenu()
@@ -64,17 +65,19 @@ public class RegisterActivity extends AppCompatActivity {
     public void register()
     {
         try {
-            RSA.GeneratePublicPrivateKeyPair(this);
             HashMap<String, String> body = new HashMap<>();
             String nameS = this.name.getText().toString();
             String usernameS = this.username.getText().toString();
             String passwordS = this.password.getText().toString();
             String credit_card_noS = this.credit_card.getText().toString();
+
+            RSA.GeneratePublicPrivateKeyPair(this, usernameS);
+
             body.put("name", nameS);
             body.put("username", usernameS);
             body.put("password", passwordS);
             body.put("credit_card_no", credit_card_noS);
-            body.put("public_key", RSA.getPublicKey());
+            body.put("public_key", RSA.getPublicKey(usernameS));
             SharedPreferences sharedPreferences = this.getSharedPreferences(usernameS, MODE_PRIVATE);
             HTTP.PostRequest(Constants.Register_Route, null, body, new HTTPResultHandler() {
                 @Override
@@ -83,6 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
                         JSONObject response = new JSONObject((String) result);
                         String key = response.getString("server_key");
                         SaveUserData(sharedPreferences,usernameS,passwordS,key);
+                        ClientSystem system = new ClientSystem(usernameS);
                         ToMainMenu();
                     } catch (Exception e) {
                         e.printStackTrace();
