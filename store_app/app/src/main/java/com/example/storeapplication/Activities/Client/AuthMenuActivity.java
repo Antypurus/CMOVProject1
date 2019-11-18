@@ -19,8 +19,8 @@ public class AuthMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstances);
         setContentView(R.layout.user_selection_menu);
 
-        register_button = findViewById(R.id.register_button);
-        login_button = findViewById(R.id.login_button);
+        register_button = findViewById(R.id.register);
+        login_button = findViewById(R.id.login);
 
         register_button.setOnClickListener(view->ToRegister());
         login_button.setOnClickListener(view->ToLogin());
