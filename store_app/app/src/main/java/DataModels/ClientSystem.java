@@ -8,10 +8,12 @@ public class ClientSystem extends Application {
     private String ClientUsername = "";
     private String ServerKey = "";
     private String ClientUserID = "";
+    private Cart cart;
     private static ClientSystem system = null;
 
     public ClientSystem(String username)
     {
+        this.cart = new Cart();
         this.ClientUsername = username;
         system = this;
     }
@@ -23,8 +25,14 @@ public class ClientSystem extends Application {
         this.ClientUserID = preferences.getString("user_id","");
     }
 
+    public Cart GetCart()
+    {
+        return this.cart;
+    }
 
-    public ClientSystem GetSystem()
+    public String GetServerKey() {return this.ServerKey;}
+
+    public static ClientSystem GetSystem()
     {
         return system;
     }

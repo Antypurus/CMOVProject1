@@ -29,13 +29,14 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         public TextView productPrice;
         public Product product;
 
-        public ProductListHolder(@NonNull ConstraintLayout layout) {
+        ProductListHolder(@NonNull ConstraintLayout layout) {
             super(layout);
 
             this.layout = layout;
             this.productName = this.layout.findViewById(R.id.productName);
             this.productPrice = this.layout.findViewById(R.id.productPrice);
         }
+
     }
 
     ProductListAdapter(ArrayList<Product> products)
