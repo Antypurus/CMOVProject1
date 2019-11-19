@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -11,7 +12,7 @@ using Server.Utils;
 
 namespace Server.Controllers
 {
-    [Route("/")]
+    [Microsoft.AspNetCore.Mvc.Route("/")]
     [ApiController]
     public class RootController : ControllerBase
     {
@@ -19,8 +20,8 @@ namespace Server.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet("status")]
-        [HttpGet("heartbeat")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("status")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("heartbeat")]
         public string HeartBeat()
         {
             return "Alive";
@@ -31,8 +32,8 @@ namespace Server.Controllers
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        [HttpPost("register")]
-        public JObject register([FromBody]JObject data)
+        [Microsoft.AspNetCore.Mvc.HttpPost("register")]
+        public JObject register([Microsoft.AspNetCore.Mvc.FromBody]JObject data)
         {
             string name = data["name"].ToString();
             string username = data["username"].ToString();
@@ -49,7 +50,7 @@ namespace Server.Controllers
         /// Return the product list as well as the decryption key necessary to get the product data
         /// </summary>
         /// <returns></returns>
-        [HttpGet("products")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("products")]
         public JObject products()
         {
             List<Product> productList = Product.GetProducts();
@@ -80,7 +81,7 @@ namespace Server.Controllers
         /// </summary>
         /// <param name="user_id"></param>
         /// <returns></returns>
-        [HttpGet("transactions")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("transactions")]
         public List<JObject> transactions(string user_id)
         {
             List<Transaction> transactions = Transaction.GetTransactions(user_id);
@@ -92,7 +93,7 @@ namespace Server.Controllers
             return jsonTransactions;
         }
 
-        [HttpGet("coupons")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("coupons")]
         public HttpResponseMessage coupons(string user_id)
         {
             List<Voucher> vouchers = Voucher.GetVouchers(user_id);
@@ -100,7 +101,8 @@ namespace Server.Controllers
             
             if(accumulated_discount.Key == -1 || accumulated_discount.Value == -1)
             {
-                HttpResponseException exception = 
+                HttpError err = new HttpError("User ID not valid");
+
             }
 
             JObject response = new JObject();
