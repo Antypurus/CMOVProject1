@@ -40,5 +40,21 @@ namespace Server.Models
             Client client = new Client(userID);
             return client;
         }
+
+        public static KeyValuePair<int, int> GetAccumulatedDiscount(String user_id)
+        {
+            Database database = Database.GetDatabase();
+
+            Entry client_id = new Entry { name = "client_id", value = user_id };
+            List<Dictionary<String,object>> values = database.Select("select current_accumulated_euro, current_accumulated_cent from Client where id=@client_id", new List<Entry> { client_id });
+            if(values.Count > 0)
+            {
+                return new KeyValuePair<int, int>((int)values[0]["current_accumulated_euro"],(int)values[0]["current_accumulated_cent"]);
+            }else
+            {
+                return new KeyValuePair<int, int>(-1,-1);
+            }
+        }
+
     }
 }

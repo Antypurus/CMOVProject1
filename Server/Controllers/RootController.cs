@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -74,6 +75,11 @@ namespace Server.Controllers
             return response;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
         [HttpGet("transactions")]
         public List<JObject> transactions(string user_id)
         {
@@ -84,6 +90,23 @@ namespace Server.Controllers
                 jsonTransactions.Add(transaction.GetJSON());
             }
             return jsonTransactions;
+        }
+
+        [HttpGet("coupons")]
+        public HttpResponseMessage coupons(string user_id)
+        {
+            List<Voucher> vouchers = Voucher.GetVouchers(user_id);
+            KeyValuePair<int,int> accumulated_discount = Client.GetAccumulatedDiscount(user_id);
+            
+            if(accumulated_discount.Key == -1 || accumulated_discount.Value == -1)
+            {
+                HttpResponseException exception = 
+            }
+
+            JObject response = new JObject();
+           
+
+            return null;
         }
 
     }
