@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -94,21 +95,29 @@ namespace Server.Controllers
         }
 
         [Microsoft.AspNetCore.Mvc.HttpGet("coupons")]
-        public HttpResponseMessage coupons(string user_id)
+        public JObject coupons(string user_id)
         {
             List<Voucher> vouchers = Voucher.GetVouchers(user_id);
             KeyValuePair<int,int> accumulated_discount = Client.GetAccumulatedDiscount(user_id);
             
             if(accumulated_discount.Key == -1 || accumulated_discount.Value == -1)
             {
-                HttpError err = new HttpError("User ID not valid");
-
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent("User ID Is Not Valid");
+                throw new HttpResponseException(message);
             }
 
             JObject response = new JObject();
-           
+            JArray vouchersJSON = new JArray();
+            foreach(Voucher voucher in vouchers)
+            {
+                vouchersJSON.Add(voucher.GetJSON());
+            }
+            response.Add("vouchers",vouchersJSON);
+            response.Add("accumulated_euro",accumulated_discount.Key);
+            response.Add("accumulated_cent",accumulated_discount.Value);
 
-            return null;
+            return response;
         }
 
     }
