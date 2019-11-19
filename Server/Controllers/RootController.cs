@@ -73,5 +73,18 @@ namespace Server.Controllers
             response.Add("key",RSAEncrypter.GetRSAEncrypter().GetPEMPublicKey());
             return response;
         }
+
+        [HttpGet("transactions")]
+        public List<JObject> transactions(string user_id)
+        {
+            List<Transaction> transactions = Transaction.GetTransactions(user_id);
+            List<JObject> jsonTransactions = new List<JObject>();
+            foreach(Transaction transaction in transactions)
+            {
+                jsonTransactions.Add(transaction.GetJSON());
+            }
+            return jsonTransactions;
+        }
+
     }
 }

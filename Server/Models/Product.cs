@@ -1,4 +1,5 @@
-﻿using Server.Utils;
+﻿using Newtonsoft.Json.Linq;
+using Server.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,8 @@ namespace Server.Models
 {
     public class Product
     {
+
+
 
         private Guid productID;
         private int productPriceEuros;
@@ -40,7 +43,7 @@ namespace Server.Models
             return this.productImageURL;
         }
 
-        private Product(Guid id, int euros, int cents, string name, string imageURL)
+        public Product(Guid id, int euros, int cents, string name, string imageURL)
         {
             this.productID = id;
             this.productPriceEuros = euros;
@@ -56,6 +59,16 @@ namespace Server.Models
             }
         }
 
+        public JObject GetJSON()
+        {
+            JObject jsonProduct = new JObject();
+            jsonProduct.Add("id", this.GetProductID().ToByteArray());
+            jsonProduct.Add("name", this.GetProductName());
+            jsonProduct.Add("euros", this.GetPriceEuros());
+            jsonProduct.Add("cents", this.GetPriceCents());
+            return jsonProduct;
+        }
+
         public static List<Product> GetProducts()
         {
             Database db = Database.GetDatabase();
@@ -65,7 +78,7 @@ namespace Server.Models
             {
                 Object image_url = productData["image_url"];
                 string image_url_string = "";
-                if(image_url != null)
+                if (image_url != null)
                 {
                     image_url_string = (string)image_url;
                 }

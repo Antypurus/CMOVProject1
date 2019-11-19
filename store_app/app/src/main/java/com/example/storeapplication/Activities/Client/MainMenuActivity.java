@@ -1,9 +1,11 @@
 package com.example.storeapplication.Activities.Client;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Button;
 
+import com.example.storeapplication.Activities.Client.CartView.CartActivity;
 import com.example.storeapplication.R;
 
 import org.json.JSONException;
@@ -52,7 +54,8 @@ public class MainMenuActivity extends QRActivity {
 
     public void CartHandler()
     {
-        //TODO
+        Intent intent = new Intent(this, CartActivity.class);
+        this.startActivity(intent);
     }
 
     public void TransactionHistoryHandler()

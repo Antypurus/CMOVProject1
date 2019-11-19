@@ -62,6 +62,7 @@
         <activity android:name=".Activities.Client.MainMenuActivity" />
         <activity android:name=".Activities.Client.AuthMenuActivity" />
         <activity android:name=".Activities.Client.LoginActivity" />
+        <activity android:name=".Activities.Client.CartView.CartActivity" />
 
     </application>
 
