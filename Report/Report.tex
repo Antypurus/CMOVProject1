@@ -258,11 +258,11 @@ Checkout information is represented in the following format:
 
 These fields have the following meanings:
 \begin{itemize}
-	\item products - 
-	\item user\textunderscore id - 
-	\item use\textunderscore discount - 
-	\item sign - 
-	\item voucher\textunderscore id - 
+	\item products - Array with UUID ids of products to be purchased.
+	\item user\textunderscore id - UUID id of the user executing the purchase.
+	\item use\textunderscore discount - Boolean indicating weather or not the user wants to use the money he has saved with vouchers to reduce the cost of the purchase.
+	\item sign - sign of the configurations of the purchase, to verify the authenticity of the user executing the purchase.
+	\item voucher\textunderscore id - UUID id of a voucher to be used this parameter is optional as the user is nor forced to use a voucher.
 \end{itemize}
 
 \subsection{Data Verification Signatures}
@@ -311,7 +311,8 @@ At any time the user can fetch the vouchers he has associated to himself in the 
 
 \subsubsection{Checkout}
 \hspace{0.6cm}
-The user can generate a checkout QR code that he can validate in the store application to execute his purchase.
+The user can generate a checkout QR code that he can validate in the store application to execute his purchase. When using a voucher the system will automatically select the first
+voucher that it can use as the choice of voucher does not matter. So this is done merely through a toggle.
 
 \subsection{Testing}
 \hspace{0.6cm}
