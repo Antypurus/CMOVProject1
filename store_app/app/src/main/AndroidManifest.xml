@@ -65,6 +65,7 @@
         <activity android:name=".Activities.Client.CartView.CartActivity" />
         <activity android:name=".Activities.Client.TransactionHistoryView.TransactionHistoryActivity" />
         <activity android:name=".Activities.Client.TransactionHistoryView.TransactionViewActivity" />
+        <activity android:name=".Activities.Client.CouponView.CouponActivity" />
 
     </application>
 
