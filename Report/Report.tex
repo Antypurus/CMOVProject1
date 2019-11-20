@@ -266,6 +266,23 @@ These fields have the following meanings:
 \end{itemize}
 
 \subsection{Data Verification Signatures}
+\hspace{0.6cm}
+The products list needs to be verified so each product that comes from the server has its json data pre the addition of the sign parameter signed with the servers
+private key, the applications then can verify that the data contained in the QR code and received from the server are indeed valid as they have access to the server
+public key to verify the signature of the product data.
+
+For the checkout we need to sign the data in a way that the server can then verify that the issues of the data is indeed who he says he is, to do this we take the
+optional parameters of the request(voucher\textunderscore id and weather or not to use the discount accumulated) and the user id and concatenate and then produce a sign from this
+data. The reason we do not sign the product array is that depending on the size of the RSA key used there will be an upper limit to the size of the data we can
+encrypt or sign, so this would put a cap on the amount of products we can have in a single transaction, so for that reason we have opted to not include the array
+that can vary in size and use only the static elements of the request that we know will not cause an issue with out 512 key.
+
+It is also notable to state the increasing the key size would allows us to encrypt or sign more data, but would create a large issue with the QR code system, as the
+bitmaps would become far too complex for the average phone camera to be able to decode with any semblance of precision and accuracy. As it stand 512 bits for the
+key seems to be the upper limit of what is reasonable due to the result signature or encrypted data size and how those interact with QR code complexity.
+
+This leads us to conclude that QR codes do not scale well and are an unfeasible way to implement this type of system and a NFC based solution would be more much feasible,
+however many phones still don't have NFC support, including our own, making us unable to implement such a solution.
 
 \pagebreak
 \section{Features \& Tests}
