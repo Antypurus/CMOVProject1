@@ -73,6 +73,24 @@ namespace Server.Models
             }
         }
 
+        public static void UpdateTotalSpent(string user_id, int euro, int cent)
+        {
+            Database database = Database.GetDatabase();
+            Entry user_entry = new Entry { name = "user_id", value = user_id };
+            Entry euro_entry = new Entry { name = "euro", value = euro };
+            Entry cent_entry = new Entry { name = "cent", value = cent };
+            database.Insert("update Client set current_total_spent_euro=@euro, current_total_spent_cent=@cent where id=@user_id", new List<Entry> { user_entry, euro_entry, cent_entry);
+        }
+
+        public static void UpdateTotalAccumulated(string user_id, int euro, int cent)
+        {
+            Database database = Database.GetDatabase();
+            Entry user_entry = new Entry { name = "user_id", value = user_id };
+            Entry euro_entry = new Entry { name = "euro", value = euro };
+            Entry cent_entry = new Entry { name = "cent", value = cent };
+            database.Insert("update Client set current_accumulated_euro=@euro, current_accumulated_cent=@cent where id=@user_id", new List<Entry> { user_entry, euro_entry, cent_entry);
+        }
+
         public static string GetUserPublicKey(string user_id)
         {
             Database database = Database.GetDatabase();

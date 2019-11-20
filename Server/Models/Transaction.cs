@@ -27,7 +27,7 @@ namespace Server.Models
                 new List<Entry>{client_id,voucher_id,was_discounted});
             foreach (Product product in products)
             {
-                
+                Product.SetTransaction(product.GetProductID().ToString(),id);
             }
         }
 

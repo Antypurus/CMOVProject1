@@ -216,14 +216,33 @@ namespace Server.Controllers
             }
 
             // generate transaction
+            if (voucher_id_string != "")
+            {
+                Transaction.RegisterTransaction(user_id, voucher_id_string, use_discount, products_list);
+            }
+            else
+            {
+                Transaction.RegisterTransaction(user_id, "NULL", use_discount, products_list);
+            }
 
             // update current spent
+            int spent_euros = (int)MathF.Truncate(totalAmmountSpent);
+            int spent_cents = (int)(totalAmmountSpent - spent_euros);
+            Client.UpdateTotalSpent(user_id, spent_euros, spent_cents);
 
             // update ammount in account
+            totalAccumulated += account_delta;
+            int accumulated_euros = (int)MathF.Truncate(totalAccumulated);
+            int accumulated_cents = (int)(totalAccumulated - accumulated_euros);
+            Client.UpdateTotalAccumulated(user_id, accumulated_euros, accumulated_cents);
 
             if (generateVoucher)
             {
                 // add voucher to user account
+                for (int i = 0; i < vouchersToGenerate; ++i)
+                {
+                    Voucher.CreateVoucher(user_id);
+                }
             }
 
             return true;

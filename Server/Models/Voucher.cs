@@ -14,6 +14,13 @@ namespace Server.Models
         private Guid client;
         private bool wasUsed;
 
+        public static void CreateVoucher(string user_id)
+        {
+            Database database = Database.GetDatabase();
+            Entry entry = new Entry { name = "user_id", value = user_id };
+            database.Insert("insert into Voucher(client) values(@user_id);", new List<Entry> { entry });
+        }
+
         private Voucher(Guid id, Guid client, bool wasUsed)
         {
             this.id = id;
@@ -54,7 +61,7 @@ namespace Server.Models
         {
             Database database = Database.GetDatabase();
             Entry voucher = new Entry { name = "voucher_id", value = voucher_id };
-            List<Dictionary<string,object>> result = database.Select("select exists(select * from Voucher where id=@voucher_id and was_used=FALSE);", new List<Entry> { voucher });
+            List<Dictionary<string, object>> result = database.Select("select exists(select * from Voucher where id=@voucher_id and was_used=FALSE);", new List<Entry> { voucher });
             return (bool)result[0]["exists"];
         }
 
@@ -62,7 +69,7 @@ namespace Server.Models
         {
             Database database = Database.GetDatabase();
             Entry voucher = new Entry { name = "voucher_id", value = voucher_id };
-            database.Insert("update Voucher set was_used=TRUE where id=@voucher_id", new List<Entry>{voucher});
+            database.Insert("update Voucher set was_used=TRUE where id=@voucher_id", new List<Entry> { voucher });
         }
 
     }
