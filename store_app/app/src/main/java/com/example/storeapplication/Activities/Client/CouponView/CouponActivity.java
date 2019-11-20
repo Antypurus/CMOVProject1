@@ -35,6 +35,7 @@ public class CouponActivity extends AppCompatActivity {
         accumulatedView = findViewById(R.id.ammount_in_account);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        couponList.setLayoutManager(layoutManager);
 
         try {
             HTTP.GetRequest(Constants.Coupon_List_Route, null, new HTTPResultHandler() {
@@ -53,6 +54,8 @@ public class CouponActivity extends AppCompatActivity {
                         for (int i = 0; i < vouchersJSON.length(); ++i) {
                             vouchers.add(vouchersJSON.getString(i));
                         }
+                        CouponAdapter adapter = new CouponAdapter(vouchers);
+                        couponList.setAdapter(adapter);
                         accumulatedView.setText(""+accumulated+"€");
                     } catch (Exception e) {
                         e.printStackTrace();
