@@ -46,14 +46,40 @@ namespace Server.Models
             Database database = Database.GetDatabase();
 
             Entry client_id = new Entry { name = "client_id", value = user_id };
-            List<Dictionary<String,object>> values = database.Select("select current_accumulated_euro, current_accumulated_cent from Client where id=@client_id", new List<Entry> { client_id });
-            if(values.Count > 0)
+            List<Dictionary<String, object>> values = database.Select("select current_accumulated_euro, current_accumulated_cent from Client where id=@client_id", new List<Entry> { client_id });
+            if (values.Count > 0)
             {
-                return new KeyValuePair<int, int>((int)values[0]["current_accumulated_euro"],(int)values[0]["current_accumulated_cent"]);
-            }else
-            {
-                return new KeyValuePair<int, int>(-1,-1);
+                return new KeyValuePair<int, int>((int)values[0]["current_accumulated_euro"], (int)values[0]["current_accumulated_cent"]);
             }
+            else
+            {
+                return new KeyValuePair<int, int>(-1, -1);
+            }
+        }
+
+        public static KeyValuePair<int, int> GetTotalAmmountSpent(String user_id)
+        {
+            Database database = Database.GetDatabase();
+
+            Entry client_id = new Entry { name = "client_id", value = user_id };
+            List<Dictionary<String, object>> values = database.Select("select current_total_spent_euro, current_total_spent_cent from Client where id=@client_id", new List<Entry> { client_id });
+            if (values.Count > 0)
+            {
+                return new KeyValuePair<int, int>((int)values[0]["current_total_spent_euro"], (int)values[0]["current_total_spent_cent"]);
+            }
+            else
+            {
+                return new KeyValuePair<int, int>(-1, -1);
+            }
+        }
+
+        public static string GetUserPublicKey(string user_id)
+        {
+            Database database = Database.GetDatabase();
+            Entry entry = new Entry { name = "client_id", value = user_id };
+            List<Dictionary<string, object>> result = database.Select("select public_key from Client where id=@client_id", new List<Entry> { entry });
+            if (result.Count <= 0) return null;
+            return (string)result[0]["public_key"];
         }
 
     }

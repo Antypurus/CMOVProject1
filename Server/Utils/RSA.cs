@@ -76,6 +76,16 @@ namespace Server.Utils
             return isValid;
         }
 
+        public bool Verify(string data, string signature, string key)
+        {
+            key = "-----BEGIN PUBLIC KEY-----"+key+"-----END PUBLIC KEY-----";
+            RSACryptoServiceProvider public_key = ImportPublicKey(key);
+            byte[] byteformateddata = Encoding.Unicode.GetBytes(data);
+            byte[] byteformatedsign = Convert.FromBase64String(signature);
+            bool isValid = public_key.VerifyData(byteformateddata,byteformatedsign,HashAlgorithmName.SHA1,RSASignaturePadding.Pkcs1);
+            return isValid;
+        }
+
         // From Here On Out This Is NOT MY CODE
         /// <summary>
         /// Import OpenSSH PEM private key string into MS RSACryptoServiceProvider

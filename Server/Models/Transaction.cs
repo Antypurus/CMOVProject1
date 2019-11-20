@@ -17,6 +17,20 @@ namespace Server.Models
 
         private List<Product> products;
 
+        public static void RegisterTransaction(string client, string voucher, bool wasDiscounted, List<Product> products)
+        {
+            Entry client_id = new Entry { name = "client_id", value = client };
+            Entry voucher_id = new Entry { name = "voucher_id", value = voucher };
+            Entry was_discounted = new Entry { name = "should_discount", value = wasDiscounted };
+            Database database = Database.GetDatabase();
+            string id = (string)database.InsertWithReturn("insert into Purchase(client,voucher,should_discount) values (@client_id,@voucher_id,@should_discounrd) returning id;",
+                new List<Entry>{client_id,voucher_id,was_discounted});
+            foreach (Product product in products)
+            {
+                
+            }
+        }
+
         private Transaction(Guid id, Guid client, Guid voucher, bool wasDiscountUser, List<Product> products)
         {
             this.id = id;
@@ -29,16 +43,16 @@ namespace Server.Models
         public JObject GetJSON()
         {
             JObject jsonTransaction = new JObject();
-            jsonTransaction.Add("transaction_id",this.id.ToString());
-            jsonTransaction.Add("client_id",this.client.ToString());
-            jsonTransaction.Add("was_discounter",this.was_discount_used);
+            jsonTransaction.Add("transaction_id", this.id.ToString());
+            jsonTransaction.Add("client_id", this.client.ToString());
+            jsonTransaction.Add("was_discounter", this.was_discount_used);
 
             JArray products = new JArray();
-            foreach(Product product in this.products)
+            foreach (Product product in this.products)
             {
                 products.Add(product.GetJSON());
             }
-            jsonTransaction.Add("products",products);
+            jsonTransaction.Add("products", products);
 
             return jsonTransaction;
         }

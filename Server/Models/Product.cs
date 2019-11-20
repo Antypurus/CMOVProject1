@@ -93,5 +93,34 @@ namespace Server.Models
             return productList;
         }
 
+        public static Product GetProduct(string product_id)
+        {
+            Database db = Database.GetDatabase();
+            List<Dictionary<string, object>> products = db.Select("select * from Product where id=@product_id;", new List<Entry>());
+            if (products.Count <= 0) return null;
+            Dictionary<string, object> productData = products[0];
+            Object image_url = productData["image_url"];
+            string image_url_string = "";
+            if (image_url != null)
+            {
+                image_url_string = (string)image_url;
+            }
+            Product product = new Product(
+                (Guid)productData["id"],
+                (int)productData["price_euro"],
+                (int)productData["price_cent"],
+                (string)productData["name"],
+                image_url_string);
+            return product;
+        }
+
+        public static void SetTransaction(string product_id, string transaction_id)
+        {
+            Database db = Database.GetDatabase();
+            Entry purchase = new Entry { name = "purchase_id", value = transaction_id };
+            Entry product = new Entry { name = "product_id", value = product_id };
+            db.Insert("update Product set purchase=@purchase_id where id=@product_id;", new List<Entry> { purchase, product });
+        }
+
     }
 }
