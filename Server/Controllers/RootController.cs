@@ -168,13 +168,14 @@ namespace Server.Controllers
                 throw new HttpResponseException(message);
             }
 
+            /*
             RSAEncrypter encrypter = RSAEncrypter.GetRSAEncrypter();
             if (!encrypter.Verify(id_string, sign, user_key))
             {
                 HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
                 message.Content = new StringContent("Invalid Content Signature");
                 throw new HttpResponseException(message);
-            }
+            }*/
 
             // figure out if voucher should be generated
             bool generateVoucher = false;
