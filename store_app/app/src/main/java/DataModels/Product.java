@@ -22,13 +22,22 @@ public class Product implements Serializable {
         JSONObject JSONproduct = new JSONObject(data);
         String signature = JSONproduct.getString("sign");
         String rawProduct = JSONproduct.getString("product");
-        if(RSA.Verify(rawProduct,signature,key)) {
+        if (RSA.Verify(rawProduct, signature, key)) {
             JSONObject product = new JSONObject(JSONproduct.getString("product"));
             this.productID = product.getString("id");
             this.productName = product.getString("name");
             this.priceEuro = product.getInt("euros");
             this.priceCent = product.getInt("cents");
         }
+    }
+
+    public Product(String data) throws Exception {
+        this.RAWJSON = data;
+        JSONObject product = new JSONObject(data);
+        this.productID = product.getString("id");
+        this.productName = product.getString("name");
+        this.priceEuro = product.getInt("euros");
+        this.priceCent = product.getInt("cents");
     }
 
     public int getPriceCent() {

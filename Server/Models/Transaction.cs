@@ -45,7 +45,7 @@ namespace Server.Models
             JObject jsonTransaction = new JObject();
             jsonTransaction.Add("transaction_id", this.id.ToString());
             jsonTransaction.Add("client_id", this.client.ToString());
-            jsonTransaction.Add("was_discounter", this.was_discount_used);
+            jsonTransaction.Add("was_discounted", this.was_discount_used);
 
             JArray products = new JArray();
             foreach (Product product in this.products)
