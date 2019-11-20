@@ -52,7 +52,7 @@
 \begin{minipage}{0.6\textwidth}
 \begin{flushleft} \large
 \emph{Autores:}\\
-Diogo \textsc{Reis} - up2015-----\\
+Diogo \textsc{Reis} - up201505472\\
 Tiago \textsc{Magalhães} - up201607931\\
 
 \end{flushleft}
@@ -93,9 +93,11 @@ Tiago \textsc{Magalhães} - up201607931\\
 \subsection{Server}
 
 \subsubsection{REST WebAPI}
+\hspace{0.6cm}
 The server uses a REST WebAPI provided by the ASP.NET framework to handle all the communication with it. All routes are present in a single controller under the router of server. 
 
 \subsubsection{Database}
+\hspace{0.6cm}
 Communication with the PostgreSQL database is done using the Npgsql package, it is then abstracted into a singleton class that provides the common insert and select operation. Prepared
 statements are done via an entry system where each entry has a name, a value and a boolean indicating if the entry is a UUID or not, the entry names are then matched to the
 query markers for parameters.
@@ -104,20 +106,43 @@ All responses to select queries are done via list of dictionaries that map strin
 contain the values of the various columns in the database, the entries have the same name as they do in the database schema.
 
 \subsubsection{RSA Encryption \& Signing}
+\hspace{0.6cm}
 Encryption is done using the .NET Crypto Service Providers, specifically RSA Crypto Service Provider, as well as the BouncyCastle package that is used for parsing and exporting public and private
-keys to and from the PEM string format. This is also done with a singleton class that exposes Encryption, Decryption, Signing and Verifying methods.
+keys to and from the PEM string format. This is also done with a singleton class that exposes Encryption, Decryption, Signing and Verifying data methods.
 
 Any encrypted data or signatures are in Base64 format, while all data to be verified or encrypted are expected to be in a Unicode UTF-16 encoding.
 
 \subsection{Store And Client Applications}
 
 \subsubsection{HTTP Requests}
+\hspace{0.6cm}
+All HTTP requests are done via static methods that make use of standard Java facilities such as URL and HttpUrlConnection. All requests are run in an Android AsyncTask so as not
+to block the UI main thread of Android. Each request method also receive an instant of a class called HTTPResultHandler, this class handles the result of the HTTP request once
+it is ready, and this is done via its Handler method.
 
 \subsubsection{QR Codes}
+\hspace{0.6cm}
+QR Code handling is done via the Google Zebra Crossing (zxing) library and some of its android integrations, methods are provided for generating a
+QR code and for reading a QR code.
+
+QR code generation is rather straightforward with a method call that returns a Bitmap.
+
+QR code reading is a bit more involved as it makes use of the external bar code scanner application and requires the activity to override its onActivityResult method, therefore
+to simplify this system and force QR code reader users to properly overload this method we have created an Android Activity that is abstract and forces its subclasses to
+implement a handler that it will internally call when the onActivityResult method is triggered.
 
 \subsubsection{RSA Encryption \& Signing}
+\hspace{0.6cm}
+RSA encryption and signing is done via the standard java facilities for security purposes and Androids KeyStore facilities. When a new user is registed a new private key public key
+pair is introduced into the Android Secure Key Store Enclave.
+
+All further usages of this class are done via static methods that when needed receive the username of the user, so that they can fetch his key for various security purposes.
+
+This class offers static methods for encryption, decryption, signing and verifying data.
 
 \subsubsection{Data Caching}
+\hspace{0.6cm}
+All data caching is done via the Android SharedPreferences Facilities.
 
 
 \pagebreak
@@ -167,6 +192,7 @@ CREATE TABLE Product(
 );
 \end{minted}
 \subsubsection{Client}
+\hspace{0.6cm}
 This table contains information about users of the platform and has the following fields:
 \begin{itemize}
     \item id - UUID representing the identification of the user.
@@ -183,6 +209,7 @@ This table contains information about users of the platform and has the followin
 
 
 \subsubsection{Voucher}
+\hspace{0.6cm}
 This table contains the voucher registered in the system and has the following details:
 \begin{itemize}
     \item id - UUID representing the identification of the voucher.
@@ -192,6 +219,7 @@ This table contains the voucher registered in the system and has the following d
 
 
 \subsubsection{Purchase}
+\hspace{0.6cm}
 This table contains information about purchases and has the following details:
 \begin{itemize}
     \item id - UUID representing the identification of the purchase.
@@ -202,6 +230,7 @@ This table contains information about purchases and has the following details:
 
 
 \subsubsection{Product}
+\hspace{0.6cm}
 This table contains the products registered in the system and has the following information:
 \begin{itemize}
     \item id - UUID representing the identification of the product.
