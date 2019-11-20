@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 public class ClientSystem extends Application {
 
-    private String ClientUsername = "";
+    public String ClientUsername = "";
     private String ServerKey = "";
     public String ClientUserID = "";
     private Cart cart;
