@@ -8,9 +8,6 @@ import android.widget.Button;
 import com.example.storeapplication.Activities.Client.CartView.CartActivity;
 import com.example.storeapplication.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import Common.QR.QRActivity;
 import DataModels.ClientSystem;
 import DataModels.Product;
