@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{\PYGZob{}}
+	\PYG{err}{products:[\PYGZsq{}product\PYGZus{}id1\PYGZsq{},\PYGZsq{}product\PYGZus{}id2\PYGZsq{},...],}
+	\PYG{err}{user\PYGZus{}id:\PYGZsq{}user\PYGZus{}id\PYGZsq{},}
+	\PYG{err}{use\PYGZus{}discount:true|false,}
+	\PYG{err}{sign:\PYGZsq{}sign\PYGZsq{},}
+	\PYG{err}{voucher\PYGZus{}id:\PYGZsq{}voucher\PYGZus{}id\PYGZsq{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}
