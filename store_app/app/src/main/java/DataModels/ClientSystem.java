@@ -19,6 +19,22 @@ public class ClientSystem extends Application {
         system = this;
     }
 
+    private void Login()
+    {
+        SharedPreferences preferences = getSharedPreferences("Current_User",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Current_Username",this.ClientUsername);
+        editor.apply();
+    }
+
+    private void Logout()
+    {
+        SharedPreferences preferences = getSharedPreferences("Current_User",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Current_Username","");
+        editor.apply();
+    }
+
     private void fetchUserData()
     {
         SharedPreferences preferences = getSharedPreferences(this.ClientUsername,MODE_PRIVATE);
