@@ -135,7 +135,7 @@ namespace Server.Utils
             {
                 if (entry.isUUID)
                 {
-                    command.Parameters.AddWithValue(entry.name, NpgsqlDbType.Uuid, entry.value);
+                    command.Parameters.AddWithValue(entry.name, NpgsqlDbType.Uuid, new Guid((string)entry.value));
                 }else
                 {
                     command.Parameters.AddWithValue(entry.name, entry.value);
@@ -159,7 +159,7 @@ namespace Server.Utils
             {
                 if (entry.isUUID)
                 {
-                    command.Parameters.AddWithValue(entry.name, NpgsqlDbType.Uuid, entry.value);
+                    command.Parameters.AddWithValue(entry.name, NpgsqlDbType.Uuid, new Guid((string)entry.value));
                 }else
                 {
                     command.Parameters.AddWithValue(entry.name, entry.value);

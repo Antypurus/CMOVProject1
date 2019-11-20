@@ -96,7 +96,8 @@ namespace Server.Models
         public static Product GetProduct(string product_id)
         {
             Database db = Database.GetDatabase();
-            List<Dictionary<string, object>> products = db.Select("select * from Product where id=@product_id;", new List<Entry>());
+            Entry product_entry = new Entry { name = "product_id", value = product_id, isUUID = true };
+            List<Dictionary<string, object>> products = db.Select("select * from Product where id=@product_id;", new List<Entry> { product_entry });
             if (products.Count <= 0) return null;
             Dictionary<string, object> productData = products[0];
             Object image_url = productData["image_url"];
@@ -117,8 +118,8 @@ namespace Server.Models
         public static void SetTransaction(string product_id, string transaction_id)
         {
             Database db = Database.GetDatabase();
-            Entry purchase = new Entry { name = "purchase_id", value = transaction_id ,isUUID=true};
-            Entry product = new Entry { name = "product_id", value = product_id,isUUID=true };
+            Entry purchase = new Entry { name = "purchase_id", value = transaction_id, isUUID = true };
+            Entry product = new Entry { name = "product_id", value = product_id, isUUID = true };
             db.Insert("update Product set purchase=@purchase_id where id=@product_id;", new List<Entry> { purchase, product });
         }
 

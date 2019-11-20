@@ -58,7 +58,9 @@ public class CheckoutActivity extends AppCompatActivity {
 
         //fetch coupon list
         try {
-            HTTP.GetRequest(Constants.Coupon_List_Route, null, new HTTPResultHandler() {
+            HashMap<String,String> headers = new HashMap<>();
+            headers.put("user_id", ClientSystem.GetSystem().ClientUserID);
+            HTTP.GetRequest(Constants.Coupon_List_Route, headers, new HTTPResultHandler() {
                 @Override
                 public void Handler(Object result) {
                     // parse the voucher list data

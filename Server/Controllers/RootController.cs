@@ -59,7 +59,7 @@ namespace Server.Controllers
             foreach (Product product in productList)
             {
                 JObject jsonProduct = new JObject();
-                jsonProduct.Add("id", product.GetProductID().ToByteArray());
+                jsonProduct.Add("id", product.GetProductID());
                 jsonProduct.Add("name", product.GetProductName());
                 jsonProduct.Add("euros", product.GetPriceEuros());
                 jsonProduct.Add("cents", product.GetPriceCents());
@@ -74,6 +74,7 @@ namespace Server.Controllers
             JObject response = new JObject();
             response.Add("products", signedProductList);
             response.Add("key", RSAEncrypter.GetRSAEncrypter().GetPEMPublicKey());
+            Logger.LogInfo(response.ToString(),"Root");
             return response;
         }
 
@@ -144,10 +145,11 @@ namespace Server.Controllers
             List<Product> products_list = new List<Product>();
             string id_string = "";
             float final_price = 0.0f;
-            JArray prods = new JArray(products);
+            JArray prods = JArray.Parse(products);
             for (int i = 0; i < prods.Count; ++i)
             {
                 string product_id = prods.ElementAt(i).ToString();
+                Logger.Log(product_id);
                 id_string += product_id;
                 Product product = Product.GetProduct(product_id);
                 if (product == null)

@@ -19,15 +19,24 @@ namespace Server.Models
 
         public static void RegisterTransaction(string client, string voucher, bool wasDiscounted, List<Product> products)
         {
-            Entry client_id = new Entry { name = "client_id", value = client ,isUUID=true};
-            Entry voucher_id = new Entry { name = "voucher_id", value = voucher,isUUID=true };
-            Entry was_discounted = new Entry { name = "should_discount", value = wasDiscounted,isUUID=false };
+            Entry client_id = new Entry { name = "client_id", value = client, isUUID = true };
+            Entry was_discounted = new Entry { name = "should_discount", value = wasDiscounted, isUUID = false };
             Database database = Database.GetDatabase();
-            string id = (string)database.InsertWithReturn("insert into Purchase(client,voucher,should_discount) values (@client_id,@voucher_id,@should_discounrd) returning id;",
-                new List<Entry>{client_id,voucher_id,was_discounted});
+            Guid id;
+            if (voucher != "NULL")
+            {
+                Entry voucher_id = new Entry { name = "voucher_id", value = voucher, isUUID = true };
+                id = (Guid)database.InsertWithReturn("insert into Purchase(client,voucher,should_discount) values (@client_id,@voucher_id,@should_discount) returning id;",
+                    new List<Entry> { client_id, voucher_id, was_discounted });
+            }
+            else
+            {
+                id = (Guid)database.InsertWithReturn("insert into Purchase(client,should_discount) values (@client_id,@should_discount) returning id;",
+                    new List<Entry> { client_id, was_discounted });
+            }
             foreach (Product product in products)
             {
-                Product.SetTransaction(product.GetProductID().ToString(),id);
+                Product.SetTransaction(product.GetProductID().ToString(), id.ToString());
             }
         }
 
@@ -77,7 +86,7 @@ namespace Server.Models
 
                 List<Product> products = new List<Product>();
 
-                Entry purchase_id = new Entry { name = "purchase_id", value = id.ToString() ,isUUID=true};
+                Entry purchase_id = new Entry { name = "purchase_id", value = id.ToString(), isUUID = true };
                 List<Dictionary<string, object>> products_data = database.Select("select * from Product where purchase=@purchase_id", new List<Entry> { purchase_id });
                 foreach (Dictionary<string, object> product in products_data)
                 {

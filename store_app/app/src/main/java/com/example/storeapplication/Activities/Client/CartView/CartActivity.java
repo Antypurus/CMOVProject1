@@ -1,5 +1,6 @@
 package com.example.storeapplication.Activities.Client.CartView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.storeapplication.Activities.Client.CheckoutActivity;
 import com.example.storeapplication.R;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -50,7 +52,8 @@ public class CartActivity extends AppCompatActivity {
 
     private void GoToCheckout()
     {
-        //TODO
+        Intent intent = new Intent(this, CheckoutActivity.class);
+        this.startActivity(intent);
     }
 
 }
