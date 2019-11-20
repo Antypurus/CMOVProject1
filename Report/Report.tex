@@ -252,26 +252,46 @@ This table contains the products registered in the system and has the following 
 \subsection{Features}
 
 \subsubsection{Available Product List In Store App}
+\hspace{0.6cm}
+In the store app there is a list of all products currently available in the system along with their prices, if a user click the product
+he will be displayed the corresponding QR code. All products are signed by the server to validate they have been issued by a trusted source.
 
 \subsubsection{User Registering}
+\hspace{0.6cm}
+Users have the ability to register via the client application, they need to provide their name, username, password and credit card, the user
+will then be assigned an UUID identifier and a public and private key will be generated for him and security stored in Androids Secure Key Store.
 
 \subsubsection{User Login}
+\hspace{0.6cm}
+The user is able to login into his account by providing his username and password, this login is merely local and servers to retrieve the server keys
+and the user data. If a user registers with the same username as a previously existing user, he will overwrite that users local data.
 
 \subsubsection{User Login Caching}
+\hspace{0.6cm}
+User login data is cached so that the user only needs to login in case he explicitly logs out of the system.
 
 \subsubsection{Adding Products To Cart Through QR Codes}
+\hspace{0.6cm}
 
 \subsubsection{Viewing and Editing Cart}
+\hspace{0.6cm}
 
 \subsubsection{Viewing Past Transaction}
+\hspace{0.6cm}
 
 \subsubsection{Viewing Products Bough In Past Transaction}
+\hspace{0.6cm}
 
 \subsubsection{Viewing Vouchers Available To User And Amount Of Money Usable For Discounting}
+\hspace{0.6cm}
 
 \subsubsection{Checkout}
+\hspace{0.6cm}
 
 \subsection{Testing}
+\hspace{0.6cm}
+Testing of the several apps has been done in acceptance test format, listing out what each feature needs to do and proceeding to manually test them, attempting to cover all
+possible edge case scenarios.
 
 \pagebreak
 \section{Usage Manual}
