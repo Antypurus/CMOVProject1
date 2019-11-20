@@ -1,4 +1,5 @@
 ﻿using Npgsql;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 
@@ -8,6 +9,7 @@ namespace Server.Utils
     {
         public string name;
         public Object value;
+        public bool isUUID;
     }
 
     public class Database
@@ -131,7 +133,13 @@ namespace Server.Utils
             NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
             foreach (Entry entry in values)
             {
-                command.Parameters.AddWithValue(entry.name, entry.value);
+                if (entry.isUUID)
+                {
+                    command.Parameters.AddWithValue(entry.name, NpgsqlDbType.Uuid, entry.value);
+                }else
+                {
+                    command.Parameters.AddWithValue(entry.name, entry.value);
+                }
             }
             int res = command.ExecuteNonQuery();
             return res > 0;
@@ -149,7 +157,13 @@ namespace Server.Utils
             NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
             foreach (Entry entry in values)
             {
-                command.Parameters.AddWithValue(entry.name, entry.value);
+                if (entry.isUUID)
+                {
+                    command.Parameters.AddWithValue(entry.name, NpgsqlDbType.Uuid, entry.value);
+                }else
+                {
+                    command.Parameters.AddWithValue(entry.name, entry.value);
+                }
             }
 
             return command.ExecuteScalar();
@@ -167,7 +181,13 @@ namespace Server.Utils
             NpgsqlCommand command = new NpgsqlCommand(query, this.connection);
             foreach (Entry entry in values)
             {
-                command.Parameters.AddWithValue(entry.name, entry.value);
+                if (entry.isUUID)
+                {
+                    command.Parameters.AddWithValue(entry.name, NpgsqlDbType.Uuid, new Guid((string)entry.value));
+                }else
+                {
+                    command.Parameters.AddWithValue(entry.name, entry.value);
+                }
             }
 
             NpgsqlDataReader reader = command.ExecuteReader();

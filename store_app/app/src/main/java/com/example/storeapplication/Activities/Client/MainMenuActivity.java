@@ -71,7 +71,7 @@ public class MainMenuActivity extends QRActivity {
 
     public void LogOutHandler()
     {
-        ClientSystem.GetSystem().Logout();
+        ClientSystem.GetSystem().Logout(this);
         Intent intent = new Intent(this, AuthMenuActivity.class);
         startActivity(intent);
     }

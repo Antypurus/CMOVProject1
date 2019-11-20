@@ -19,9 +19,9 @@ namespace Server.Models
 
         public static void RegisterTransaction(string client, string voucher, bool wasDiscounted, List<Product> products)
         {
-            Entry client_id = new Entry { name = "client_id", value = client };
-            Entry voucher_id = new Entry { name = "voucher_id", value = voucher };
-            Entry was_discounted = new Entry { name = "should_discount", value = wasDiscounted };
+            Entry client_id = new Entry { name = "client_id", value = client ,isUUID=true};
+            Entry voucher_id = new Entry { name = "voucher_id", value = voucher,isUUID=true };
+            Entry was_discounted = new Entry { name = "should_discount", value = wasDiscounted,isUUID=false };
             Database database = Database.GetDatabase();
             string id = (string)database.InsertWithReturn("insert into Purchase(client,voucher,should_discount) values (@client_id,@voucher_id,@should_discounrd) returning id;",
                 new List<Entry>{client_id,voucher_id,was_discounted});
@@ -65,7 +65,8 @@ namespace Server.Models
 
             Entry client_id = new Entry();
             client_id.name = "client_id";
-            client_id.value = "user_id";
+            client_id.value = user_id;
+            client_id.isUUID = true;
             List<Dictionary<string, object>> transactions_data = database.Select("select * from Purchase where client = @client_id;", new List<Entry> { client_id });
             foreach (Dictionary<string, object> transaction_data in transactions_data)
             {
@@ -76,7 +77,7 @@ namespace Server.Models
 
                 List<Product> products = new List<Product>();
 
-                Entry purchase_id = new Entry { name = "purchase_id", value = id.ToString() };
+                Entry purchase_id = new Entry { name = "purchase_id", value = id.ToString() ,isUUID=true};
                 List<Dictionary<string, object>> products_data = database.Select("select * from Product where purchase=@purchase_id", new List<Entry> { purchase_id });
                 foreach (Dictionary<string, object> product in products_data)
                 {

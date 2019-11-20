@@ -95,8 +95,9 @@ namespace Server.Controllers
         }
 
         [Microsoft.AspNetCore.Mvc.HttpGet("coupons")]
-        public JObject coupons(string user_id)
+        public JObject coupons([FromHeader]string user_id)
         {
+            Logger.LogInfo(Request.Headers.ToString(),"Coupons");
             List<Voucher> vouchers = Voucher.GetVouchers(user_id);
             KeyValuePair<int, int> accumulated_discount = Client.GetAccumulatedDiscount(user_id);
 

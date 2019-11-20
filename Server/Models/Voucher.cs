@@ -17,7 +17,7 @@ namespace Server.Models
         public static void CreateVoucher(string user_id)
         {
             Database database = Database.GetDatabase();
-            Entry entry = new Entry { name = "user_id", value = user_id };
+            Entry entry = new Entry { name = "user_id", value = user_id,isUUID=true };
             database.Insert("insert into Voucher(client) values(@user_id);", new List<Entry> { entry });
         }
 
@@ -42,8 +42,8 @@ namespace Server.Models
             List<Voucher> vouchers = new List<Voucher>();
 
             Database database = Database.GetDatabase();
-            Entry client_id = new Entry { name = "client_id", value = user_id };
-            List<Dictionary<string, object>> voucher_data = database.Select("select * from Voucher where was_used = FALSE and client=@client_id;", new List<Entry> { client_id });
+            Entry client_id = new Entry { name = "client_id", value = user_id,isUUID=true };
+            List<Dictionary<string, object>> voucher_data = database.Select("select * from Voucher where was_used=FALSE and client=@client_id;", new List<Entry> { client_id });
 
             foreach (Dictionary<string, object> voucher in voucher_data)
             {
@@ -60,7 +60,7 @@ namespace Server.Models
         public static bool isVoucherAvailable(string voucher_id)
         {
             Database database = Database.GetDatabase();
-            Entry voucher = new Entry { name = "voucher_id", value = voucher_id };
+            Entry voucher = new Entry { name = "voucher_id", value = voucher_id,isUUID=true };
             List<Dictionary<string, object>> result = database.Select("select exists(select * from Voucher where id=@voucher_id and was_used=FALSE);", new List<Entry> { voucher });
             return (bool)result[0]["exists"];
         }
@@ -68,7 +68,7 @@ namespace Server.Models
         public static void Use(string voucher_id)
         {
             Database database = Database.GetDatabase();
-            Entry voucher = new Entry { name = "voucher_id", value = voucher_id };
+            Entry voucher = new Entry { name = "voucher_id", value = voucher_id,isUUID=true };
             database.Insert("update Voucher set was_used=TRUE where id=@voucher_id", new List<Entry> { voucher });
         }
 

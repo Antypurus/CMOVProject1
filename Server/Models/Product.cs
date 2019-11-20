@@ -117,8 +117,8 @@ namespace Server.Models
         public static void SetTransaction(string product_id, string transaction_id)
         {
             Database db = Database.GetDatabase();
-            Entry purchase = new Entry { name = "purchase_id", value = transaction_id };
-            Entry product = new Entry { name = "product_id", value = product_id };
+            Entry purchase = new Entry { name = "purchase_id", value = transaction_id ,isUUID=true};
+            Entry product = new Entry { name = "product_id", value = product_id,isUUID=true };
             db.Insert("update Product set purchase=@purchase_id where id=@product_id;", new List<Entry> { purchase, product });
         }
 

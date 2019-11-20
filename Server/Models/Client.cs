@@ -29,11 +29,11 @@ namespace Server.Models
         {
             Database db = Database.GetDatabase();
             List<Entry> entries = new List<Entry>();
-            entries.Add(new Entry { name = "name", value = name });
-            entries.Add(new Entry { name = "username", value = username });
-            entries.Add(new Entry { name = "password", value = password });
-            entries.Add(new Entry { name = "credit", value = credit_card });
-            entries.Add(new Entry { name = "key", value = public_key });
+            entries.Add(new Entry { name = "name", value = name ,isUUID=false});
+            entries.Add(new Entry { name = "username", value = username,isUUID=false });
+            entries.Add(new Entry { name = "password", value = password ,isUUID=false});
+            entries.Add(new Entry { name = "credit", value = credit_card,isUUID=false });
+            entries.Add(new Entry { name = "key", value = public_key,isUUID=false });
             Guid userID = (Guid)db.InsertWithReturn("insert into " +
                 "Client(name,username,password,credit_card,public_key) " +
                 "values(@name,@username,@password,@credit,@key) returning id;", entries);
@@ -45,7 +45,7 @@ namespace Server.Models
         {
             Database database = Database.GetDatabase();
 
-            Entry client_id = new Entry { name = "client_id", value = user_id };
+            Entry client_id = new Entry { name = "client_id", value = user_id ,isUUID=true};
             List<Dictionary<String, object>> values = database.Select("select current_accumulated_euro, current_accumulated_cent from Client where id=@client_id", new List<Entry> { client_id });
             if (values.Count > 0)
             {
@@ -61,7 +61,7 @@ namespace Server.Models
         {
             Database database = Database.GetDatabase();
 
-            Entry client_id = new Entry { name = "client_id", value = user_id };
+            Entry client_id = new Entry { name = "client_id", value = user_id ,isUUID=true};
             List<Dictionary<String, object>> values = database.Select("select current_total_spent_euro, current_total_spent_cent from Client where id=@client_id", new List<Entry> { client_id });
             if (values.Count > 0)
             {
@@ -76,25 +76,25 @@ namespace Server.Models
         public static void UpdateTotalSpent(string user_id, int euro, int cent)
         {
             Database database = Database.GetDatabase();
-            Entry user_entry = new Entry { name = "user_id", value = user_id };
-            Entry euro_entry = new Entry { name = "euro", value = euro };
-            Entry cent_entry = new Entry { name = "cent", value = cent };
+            Entry user_entry = new Entry { name = "user_id", value = user_id,isUUID=true };
+            Entry euro_entry = new Entry { name = "euro", value = euro ,isUUID=false};
+            Entry cent_entry = new Entry { name = "cent", value = cent ,isUUID=false};
             database.Insert("update Client set current_total_spent_euro=@euro, current_total_spent_cent=@cent where id=@user_id", new List<Entry> { user_entry, euro_entry, cent_entry });
         }
 
         public static void UpdateTotalAccumulated(string user_id, int euro, int cent)
         {
             Database database = Database.GetDatabase();
-            Entry user_entry = new Entry { name = "user_id", value = user_id };
-            Entry euro_entry = new Entry { name = "euro", value = euro };
-            Entry cent_entry = new Entry { name = "cent", value = cent };
+            Entry user_entry = new Entry { name = "user_id", value = user_id ,isUUID=true};
+            Entry euro_entry = new Entry { name = "euro", value = euro ,isUUID=false};
+            Entry cent_entry = new Entry { name = "cent", value = cent ,isUUID=false};
             database.Insert("update Client set current_accumulated_euro=@euro, current_accumulated_cent=@cent where id=@user_id", new List<Entry> { user_entry, euro_entry, cent_entry });
         }
 
         public static string GetUserPublicKey(string user_id)
         {
             Database database = Database.GetDatabase();
-            Entry entry = new Entry { name = "client_id", value = user_id };
+            Entry entry = new Entry { name = "client_id", value = user_id ,isUUID=true};
             List<Dictionary<string, object>> result = database.Select("select public_key from Client where id=@client_id", new List<Entry> { entry });
             if (result.Count <= 0) return null;
             return (string)result[0]["public_key"];
