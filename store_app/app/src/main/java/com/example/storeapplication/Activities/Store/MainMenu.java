@@ -29,6 +29,7 @@ public class MainMenu extends QRActivity {
         resultView = findViewById(R.id.result);
 
         read_qr.setOnClickListener(view -> this.QRCodeReader.StartQRScanner(this, this));
+        product_list.setOnClickListener(view->this.OpenProductList());
     }
 
     public void OpenProductList() {
