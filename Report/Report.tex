@@ -340,6 +340,15 @@ possible edge case scenarios.
 \section{Usage Manual}
 
 \subsection{Server}
+\hspace{0.6cm}
+To run the server you will need the dotnet core 2.1 kits and a PostgreSQL database running, the database must contain a database called cmovdb and must have the
+schema presented in this documented on it, you must also have a user with username cmov and password cmov. That being said these are the default and this can
+be configured in the server files.
+
+To start the server all you need to do is run the command dotnet run in the server folder.
+
+In the server file startup.cs you can configure the IP address and Port that the server will run on. On the program.cs file you can configure the IP address, port,
+username, password and database server database that the store server will connect to and with.
 
 \subsection{Store Application}
 \subsubsection{Viewing Available Product List}
@@ -385,7 +394,7 @@ authentication menu, he will be taken to the login page where he can input his u
 matches the application credential database he will be taken to the client application main menu
 
 \begin{center}
-\includegraphics[width=0.3\linewidth]{Images/Client/ClientLogin.jpg}
+\includegraphics[width=0.35\linewidth]{Images/Client/ClientLogin.jpg}
 \captionof{figure}{Login Page}
 \end{center}
 
@@ -407,7 +416,7 @@ To add a product to the cart the user merely needs to click the scan new product
 main menu, the camera will then open up and allow the user to scan a new product into the cart. 
 
 \begin{center}
-\includegraphics[width=0.3\linewidth]{Images/Client/ClientMainMenu.jpg}
+\includegraphics[width=0.35\linewidth]{Images/Client/ClientMainMenu.jpg}
 \captionof{figure}{Client Application Main Menu}
 \end{center}
 
@@ -425,18 +434,41 @@ the remove button to remove them from the cart.
 
 \subsubsection{Viewing Past Transaction}
 \hspace{0.6cm}
-\includegraphics[width=0.3\linewidth]{Images/Client/ClientTransactionHistory.jpg}
+At any time the user can view his past transactions by click the Transaction history button, then he will be taken to a page with a list
+of all the transactions he has made in the system.
+
+\begin{center}
+\includegraphics[width=0.35\linewidth]{Images/Client/ClientTransactionHistory.jpg}
+\captionof{figure}{Client Transaction History}
+\end{center}
 
 \subsubsection{Viewing Products Bough In Past Transaction}
 \hspace{0.6cm}
-\includegraphics[width=0.3\linewidth]{Images/Client/ClientTransaction.jpg}
+If the user clicks an item in the transaction history list, he will get a list of all the items he purchased in that transaction.
+
+\begin{center}
+\includegraphics[width=0.35\linewidth]{Images/Client/ClientTransaction.jpg}
+\captionof{figure}{Products Bought In Purchase}
+\end{center}
 
 \subsubsection{Viewing Vouchers Available To User And Amount Of Money Usable For Discounting}
 \hspace{0.6cm}
-\includegraphics[width=0.3\linewidth]{Images/Client/ClientVoucherList.jpg}
+The user can at any time view the vouches he has available for use by clicking the Coupons button, he will then be taken to a page
+with a list of all the coupons he has left to use.
+
+\begin{center}
+\includegraphics[width=0.35\linewidth]{Images/Client/ClientVoucherList.jpg}
+\captionof{figure}{Client Available Voucher List}
+\end{center}
 
 \subsubsection{Checkout}
 \hspace{0.6cm}
-\includegraphics[width=0.3\linewidth]{Images/Client/ClientCheckout.jpg}
+To checkout the user needs to go into his cart and click the checkout button at which point he will be taken to the checkout page where he
+can configure the purchase and generate a QR code that he must present to the store app in order to execute the purchase.
+
+\begin{center}
+\includegraphics[width=0.35\linewidth]{Images/Client/ClientCheckout.jpg}
+\captionof{figure}{Checkout View}
+\end{center}
 
 \end{document}
