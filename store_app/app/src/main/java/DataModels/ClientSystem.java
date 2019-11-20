@@ -7,7 +7,7 @@ public class ClientSystem extends Application {
 
     private String ClientUsername = "";
     private String ServerKey = "";
-    private String ClientUserID = "";
+    public String ClientUserID = "";
     private Cart cart;
     private static ClientSystem system = null;
 
@@ -15,10 +15,11 @@ public class ClientSystem extends Application {
     {
         this.cart = new Cart();
         this.ClientUsername = username;
+        this.fetchUserData();
         system = this;
     }
 
-    private void fetchUserDate()
+    private void fetchUserData()
     {
         SharedPreferences preferences = getSharedPreferences(this.ClientUsername,MODE_PRIVATE);
         this.ServerKey = preferences.getString("Server_Key","");
