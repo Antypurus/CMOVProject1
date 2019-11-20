@@ -13,6 +13,7 @@
             left=1in,right=1in,top=1in,bottom=1in,%
             footskip=.25in]{geometry}
 \usepackage{blindtext}
+\usepackage{minted}
 
 \newgeometry{left=0.8in,right=0.8in,top=1in,bottom=1in}
 \pagestyle {fancy}
@@ -89,19 +90,187 @@ Tiago \textsc{Magalhães} - up201607931\\
 
 \section{Architecture}
 
+\subsection{Server}
+
+\subsubsection{REST WebAPI}
+The server uses a REST WebAPI provided by the ASP.NET framework to handle all the communication with it. All routes are present in a single controller under the router of server. 
+
+\subsubsection{Database}
+Communication with the PostgreSQL database is done using the Npgsql package, it is then abstracted into a singleton class that provides the common insert and select operation. Prepared
+statements are done via an entry system where each entry has a name, a value and a boolean indicating if the entry is a UUID or not, the entry names are then matched to the
+query markers for parameters.
+
+All responses to select queries are done via list of dictionaries that map strings to object, each element in the list is a row in the database, and the elements of the dictionaries
+contain the values of the various columns in the database, the entries have the same name as they do in the database schema.
+
+\subsubsection{RSA Encryption \& Signing}
+Encryption is done using the .NET Crypto Service Providers, specifically RSA Crypto Service Provider, as well as the BouncyCastle package that is used for parsing and exporting public and private
+keys to and from the PEM string format. This is also done with a singleton class that exposes Encryption, Decryption, Signing and Verifying methods.
+
+Any encrypted data or signatures are in Base64 format, while all data to be verified or encrypted are expected to be in a Unicode UTF-16 encoding.
+
+\subsection{Store And Client Applications}
+
+\subsubsection{HTTP Requests}
+
+\subsubsection{QR Codes}
+
+\subsubsection{RSA Encryption \& Signing}
+
+\subsubsection{Data Caching}
+
+
 \pagebreak
 \section{Data Scheme}
 
 \subsection{Database Data Schema}
+\begin{minted}{postgresql}
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+DROP TABLE IF EXISTS Client CASCADE;
+CREATE TABLE Client(
+	id uuid primary key default uuid_generate_v4(),
+	name text not null,
+	username text not null,
+	password text not null,
+	credit_card int not null,
+	public_key text not null,
+	current_total_spent_euro INTEGER not null default 0,
+	current_total_spent_cent INTEGER not null default 0,
+	current_accumulated_euro INTEGER not null default 0,
+	current_accumulated_cent INTEGER not null default 0
+);
+
+DROP TABLE IF EXISTS Voucher CASCADE;
+CREATE TABLE Voucher(
+	id uuid primary key default uuid_generate_v4(),
+	client uuid not null REFERENCES Client(id),
+	was_used BOOLEAN not null DEFAULT FALSE
+);
+
+DROP TABLE IF EXISTS Purchase CASCADE;
+CREATE TABLE Purchase(
+	id uuid primary key default uuid_generate_v4(),
+	client uuid not null REFERENCES Client(id),
+	voucher uuid REFERENCES Voucher(id) DEFAULT NULL,
+	should_discount BOOLEAN not null DEFAULT false
+);
+
+DROP TABLE IF EXISTS Product CASCADE;
+CREATE TABLE Product(
+	id uuid primary key default uuid_generate_v4(),
+	price_euro INTEGER not null,
+	price_cent INTEGER not null,
+	name text not null,
+	image_url text DEFAULT NULL,
+	purchase uuid REFERENCES Purchase(id) DEFAULT null
+);
+\end{minted}
+\subsubsection{Client}
+This table contains information about users of the platform and has the following fields:
+\begin{itemize}
+    \item id - UUID representing the identification of the user.
+    \item name - String representing the name of the user.
+    \item username - String representing the username or nickname of the user.
+    \item password - String representing the password of the user.
+    \item credit\textunderscore card - Integer representing the credit card number of the user.
+    \item public\textunderscore key - String containing the users RSA public key.
+    \item current\textunderscore total\textunderscore spent\textunderscore euro - The amount of money spent by the user, this is the euro component.
+    \item current\textunderscore total\textunderscore spent\textunderscore cent - The amount of money spent by the user, this is the cent component.
+    \item current\textunderscore accumulated\textunderscore euro - The amount of money the user has accumulated from voucher, this is the euro component.
+    \item current\textunderscore accumulated\textunderscore cent - The amount of money the user has accumulated from voucher, this is the cent component.
+\end{itemize}
+
+
+\subsubsection{Voucher}
+This table contains the voucher registered in the system and has the following details:
+\begin{itemize}
+    \item id - UUID representing the identification of the voucher.
+	\item client - UUID representing the identification of the user the voucher belongs to.
+	\item was\textunderscore used - Boolean representing wether or not the voucher has been used, by default this value is false.
+\end{itemize}
+
+
+\subsubsection{Purchase}
+This table contains information about purchases and has the following details:
+\begin{itemize}
+    \item id - UUID representing the identification of the purchase.
+	\item client - UUID representing the identification of the user the purchase is associated with.
+	\item voucher - UUID representing the identification of the voucher used in this purchase, this value is optional and is null by default.
+	\item should\textunderscore discount - Boolean representing weather or not the cost of the purchase was amortized with money the user had accumulated via vouchers.
+\end{itemize}
+
+
+\subsubsection{Product}
+This table contains the products registered in the system and has the following information:
+\begin{itemize}
+    \item id - UUID representing the identification of the product.
+	\item price\textunderscore euro - This is the price of the product, this is the euros component.
+	\item price\textunderscore cent - This is the price of the product, this is the cents component.
+	\item name - String representing the name of the product.
+	\item image\textunderscore url - String representing the link to an image of the product.
+	\item purchase - UUID representing the purchase this product is in, this is optional and is null by default.
+\end{itemize}
+
 
 \subsection{Checkout Information}
 
-\subsection{Data Verfication Signatures}
+\subsection{Data Verification Signatures}
 
 \pagebreak
 \section{Features \& Tests}
 
+\subsection{Features}
+
+\subsubsection{Available Product List In Store App}
+
+\subsubsection{User Registering}
+
+\subsubsection{User Login}
+
+\subsubsection{User Login Caching}
+
+\subsubsection{Adding Products To Cart Through QR Codes}
+
+\subsubsection{Viewing and Editing Cart}
+
+\subsubsection{Viewing Past Transaction}
+
+\subsubsection{Viewing Products Bough In Past Transaction}
+
+\subsubsection{Viewing Vouchers Available To User And Amount Of Money Usable For Discounting}
+
+\subsubsection{Checkout}
+
+\subsection{Testing}
+
 \pagebreak
 \section{Usage Manual}
+
+\subsection{Server}
+
+\subsection{Store Application}
+\subsubsection{Viewing Available Product List}
+
+\subsubsection{Checkout}
+
+\subsection{Client Application}
+\subsubsection{User Registering}
+
+\subsubsection{User Login}
+
+\subsubsection{User Login Caching}
+
+\subsubsection{Adding Products To Cart Through QR Codes}
+
+\subsubsection{Viewing and Editing Cart}
+
+\subsubsection{Viewing Past Transaction}
+
+\subsubsection{Viewing Products Bough In Past Transaction}
+
+\subsubsection{Viewing Vouchers Available To User And Amount Of Money Usable For Discounting}
+
+\subsubsection{Checkout}
 
 \end{document}

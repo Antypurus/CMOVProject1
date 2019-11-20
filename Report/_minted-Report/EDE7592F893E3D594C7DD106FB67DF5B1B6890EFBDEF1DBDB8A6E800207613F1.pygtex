@@ -1,0 +1,42 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{k}{EXTENSION} \PYG{k}{IF} \PYG{k}{NOT} \PYG{k}{EXISTS} \PYG{l+s+sName}{\PYGZdq{}uuid\PYGZhy{}ossp\PYGZdq{}}\PYG{p}{;}
+
+\PYG{k}{DROP} \PYG{k}{TABLE} \PYG{k}{IF} \PYG{k}{EXISTS} \PYG{n}{Client} \PYG{k}{CASCADE}\PYG{p}{;}
+\PYG{k}{CREATE} \PYG{k}{TABLE} \PYG{n}{Client}\PYG{p}{(}
+	\PYG{n}{id} \PYG{n+nb}{uuid} \PYG{k}{primary} \PYG{k}{key} \PYG{k}{default} \PYG{n}{uuid\PYGZus{}generate\PYGZus{}v4}\PYG{p}{(),}
+	\PYG{k}{name} \PYG{n+nb}{text} \PYG{k}{not} \PYG{k}{null}\PYG{p}{,}
+	\PYG{n}{username} \PYG{n+nb}{text} \PYG{k}{not} \PYG{k}{null}\PYG{p}{,}
+	\PYG{k}{password} \PYG{n+nb}{text} \PYG{k}{not} \PYG{k}{null}\PYG{p}{,}
+	\PYG{n}{credit\PYGZus{}card} \PYG{n+nb}{int} \PYG{k}{not} \PYG{k}{null}\PYG{p}{,}
+	\PYG{n}{public\PYGZus{}key} \PYG{n+nb}{text} \PYG{k}{not} \PYG{k}{null}\PYG{p}{,}
+	\PYG{n}{current\PYGZus{}total\PYGZus{}spent\PYGZus{}euro} \PYG{n+nb}{INTEGER} \PYG{k}{not} \PYG{k}{null} \PYG{k}{default} \PYG{l+m+mf}{0}\PYG{p}{,}
+	\PYG{n}{current\PYGZus{}total\PYGZus{}spent\PYGZus{}cent} \PYG{n+nb}{INTEGER} \PYG{k}{not} \PYG{k}{null} \PYG{k}{default} \PYG{l+m+mf}{0}\PYG{p}{,}
+	\PYG{n}{current\PYGZus{}accumulated\PYGZus{}euro} \PYG{n+nb}{INTEGER} \PYG{k}{not} \PYG{k}{null} \PYG{k}{default} \PYG{l+m+mf}{0}\PYG{p}{,}
+	\PYG{n}{current\PYGZus{}accumulated\PYGZus{}cent} \PYG{n+nb}{INTEGER} \PYG{k}{not} \PYG{k}{null} \PYG{k}{default} \PYG{l+m+mf}{0}
+\PYG{p}{);}
+
+\PYG{k}{DROP} \PYG{k}{TABLE} \PYG{k}{IF} \PYG{k}{EXISTS} \PYG{n}{Voucher} \PYG{k}{CASCADE}\PYG{p}{;}
+\PYG{k}{CREATE} \PYG{k}{TABLE} \PYG{n}{Voucher}\PYG{p}{(}
+	\PYG{n}{id} \PYG{n+nb}{uuid} \PYG{k}{primary} \PYG{k}{key} \PYG{k}{default} \PYG{n}{uuid\PYGZus{}generate\PYGZus{}v4}\PYG{p}{(),}
+	\PYG{n}{client} \PYG{n+nb}{uuid} \PYG{k}{not} \PYG{k}{null} \PYG{k}{REFERENCES} \PYG{n}{Client}\PYG{p}{(}\PYG{n}{id}\PYG{p}{),}
+	\PYG{n}{was\PYGZus{}used} \PYG{n+nb}{BOOLEAN} \PYG{k}{not} \PYG{k}{null} \PYG{k}{DEFAULT} \PYG{k}{FALSE}
+\PYG{p}{);}
+
+\PYG{k}{DROP} \PYG{k}{TABLE} \PYG{k}{IF} \PYG{k}{EXISTS} \PYG{n}{Purchase} \PYG{k}{CASCADE}\PYG{p}{;}
+\PYG{k}{CREATE} \PYG{k}{TABLE} \PYG{n}{Purchase}\PYG{p}{(}
+	\PYG{n}{id} \PYG{n+nb}{uuid} \PYG{k}{primary} \PYG{k}{key} \PYG{k}{default} \PYG{n}{uuid\PYGZus{}generate\PYGZus{}v4}\PYG{p}{(),}
+	\PYG{n}{client} \PYG{n+nb}{uuid} \PYG{k}{not} \PYG{k}{null} \PYG{k}{REFERENCES} \PYG{n}{Client}\PYG{p}{(}\PYG{n}{id}\PYG{p}{),}
+	\PYG{n}{voucher} \PYG{n+nb}{uuid} \PYG{k}{REFERENCES} \PYG{n}{Voucher}\PYG{p}{(}\PYG{n}{id}\PYG{p}{)} \PYG{k}{DEFAULT} \PYG{k}{NULL}\PYG{p}{,}
+	\PYG{n}{should\PYGZus{}discount} \PYG{n+nb}{BOOLEAN} \PYG{k}{not} \PYG{k}{null} \PYG{k}{DEFAULT} \PYG{k}{false}
+\PYG{p}{);}
+
+\PYG{k}{DROP} \PYG{k}{TABLE} \PYG{k}{IF} \PYG{k}{EXISTS} \PYG{n}{Product} \PYG{k}{CASCADE}\PYG{p}{;}
+\PYG{k}{CREATE} \PYG{k}{TABLE} \PYG{n}{Product}\PYG{p}{(}
+	\PYG{n}{id} \PYG{n+nb}{uuid} \PYG{k}{primary} \PYG{k}{key} \PYG{k}{default} \PYG{n}{uuid\PYGZus{}generate\PYGZus{}v4}\PYG{p}{(),}
+	\PYG{n}{price\PYGZus{}euro} \PYG{n+nb}{INTEGER} \PYG{k}{not} \PYG{k}{null}\PYG{p}{,}
+	\PYG{n}{price\PYGZus{}cent} \PYG{n+nb}{INTEGER} \PYG{k}{not} \PYG{k}{null}\PYG{p}{,}
+	\PYG{k}{name} \PYG{n+nb}{text} \PYG{k}{not} \PYG{k}{null}\PYG{p}{,}
+	\PYG{n}{image\PYGZus{}url} \PYG{n+nb}{text} \PYG{k}{DEFAULT} \PYG{k}{NULL}\PYG{p}{,}
+	\PYG{n}{purchase} \PYG{n+nb}{uuid} \PYG{k}{REFERENCES} \PYG{n}{Purchase}\PYG{p}{(}\PYG{n}{id}\PYG{p}{)} \PYG{k}{DEFAULT} \PYG{k}{null}
+\PYG{p}{);}
+\end{Verbatim}
