@@ -6,6 +6,8 @@ import android.view.KeyEvent;
 import android.widget.Button;
 
 import com.example.storeapplication.Activities.Client.CartView.CartActivity;
+import com.example.storeapplication.Activities.Client.CouponView.CouponActivity;
+import com.example.storeapplication.Activities.Client.TransactionHistoryView.TransactionHistoryActivity;
 import com.example.storeapplication.R;
 
 import Common.QR.QRActivity;
@@ -57,17 +59,21 @@ public class MainMenuActivity extends QRActivity {
 
     public void TransactionHistoryHandler()
     {
-        //TODO
+        Intent intent = new Intent(this, TransactionHistoryActivity.class);
+        startActivity(intent);
     }
 
     public void CouponListHandler()
     {
-        //TODO
+        Intent intent = new Intent(this, CouponActivity.class);
+        startActivity(intent);
     }
 
     public void LogOutHandler()
     {
-        //TODO
+        ClientSystem.GetSystem().Logout();
+        Intent intent = new Intent(this, AuthMenuActivity.class);
+        startActivity(intent);
     }
 
     @Override

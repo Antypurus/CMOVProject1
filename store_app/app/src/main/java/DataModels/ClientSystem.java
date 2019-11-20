@@ -16,6 +16,7 @@ public class ClientSystem extends Application {
         this.cart = new Cart();
         this.ClientUsername = username;
         this.fetchUserData();
+        this.Login();
         system = this;
     }
 
@@ -27,7 +28,7 @@ public class ClientSystem extends Application {
         editor.apply();
     }
 
-    private void Logout()
+    public void Logout()
     {
         SharedPreferences preferences = getSharedPreferences("Current_User",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
