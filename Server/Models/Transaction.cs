@@ -81,7 +81,15 @@ namespace Server.Models
             {
                 Guid id = (Guid)transaction_data["id"];
                 Guid client = (Guid)transaction_data["client"];
-                Guid voucher = (Guid)transaction_data["voucher"];
+                Guid voucher = new Guid();
+                if(transaction_data.ContainsKey("voucher"))
+                {
+                    if (transaction_data["voucher"] != null)
+                    {
+                        voucher = (Guid)transaction_data["voucher"];
+                    }
+                }
+               
                 bool wasDiscounter = (bool)transaction_data["should_discount"];
 
                 List<Product> products = new List<Product>();

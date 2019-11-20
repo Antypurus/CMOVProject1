@@ -74,7 +74,6 @@ namespace Server.Controllers
             JObject response = new JObject();
             response.Add("products", signedProductList);
             response.Add("key", RSAEncrypter.GetRSAEncrypter().GetPEMPublicKey());
-            Logger.LogInfo(response.ToString(),"Root");
             return response;
         }
 
@@ -84,21 +83,22 @@ namespace Server.Controllers
         /// <param name="user_id"></param>
         /// <returns></returns>
         [Microsoft.AspNetCore.Mvc.HttpGet("transactions")]
-        public List<JObject> transactions(string user_id)
+        public List<JObject> transactions([FromHeader]string user_id)
         {
+            Logger.Log("Here");
             List<Transaction> transactions = Transaction.GetTransactions(user_id);
             List<JObject> jsonTransactions = new List<JObject>();
             foreach (Transaction transaction in transactions)
             {
                 jsonTransactions.Add(transaction.GetJSON());
             }
+            Logger.Log(jsonTransactions.ToString());
             return jsonTransactions;
         }
 
         [Microsoft.AspNetCore.Mvc.HttpGet("coupons")]
         public JObject coupons([FromHeader]string user_id)
         {
-            Logger.LogInfo(Request.Headers.ToString(),"Coupons");
             List<Voucher> vouchers = Voucher.GetVouchers(user_id);
             KeyValuePair<int, int> accumulated_discount = Client.GetAccumulatedDiscount(user_id);
 
@@ -149,7 +149,6 @@ namespace Server.Controllers
             for (int i = 0; i < prods.Count; ++i)
             {
                 string product_id = prods.ElementAt(i).ToString();
-                Logger.Log(product_id);
                 id_string += product_id;
                 Product product = Product.GetProduct(product_id);
                 if (product == null)
