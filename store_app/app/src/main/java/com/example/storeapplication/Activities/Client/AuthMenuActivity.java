@@ -1,6 +1,7 @@
 package com.example.storeapplication.Activities.Client;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Button;
@@ -8,6 +9,8 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.storeapplication.R;
+
+import DataModels.ClientSystem;
 
 public class AuthMenuActivity extends AppCompatActivity {
 
@@ -25,6 +28,15 @@ public class AuthMenuActivity extends AppCompatActivity {
 
         register_button.setOnClickListener(view->ToRegister());
         login_button.setOnClickListener(view->ToLogin());
+
+        SharedPreferences preferences = getSharedPreferences("Current_User",MODE_PRIVATE);
+        String current = preferences.getString("Current_Username","");
+        if(!current.equals(""))
+        {
+            ClientSystem system = new ClientSystem(current);
+            Intent intent = new Intent(this,MainMenuActivity.class);
+            this.startActivity(intent);
+        }
     }
 
     public void ToRegister()
