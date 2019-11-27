@@ -35,16 +35,9 @@ public class CartActivity extends AppCompatActivity {
 
         LinearLayoutManager layout = new LinearLayoutManager(this);
         product_list.setLayoutManager(layout);
-        product_list.setAdapter(new CartAdapter(ClientSystem.GetSystem().GetCart().GetProducts()));
+        product_list.setAdapter(new CartAdapter(ClientSystem.GetSystem().GetCart().GetProducts(),this));
 
-        CopyOnWriteArrayList<Product> products = ClientSystem.GetSystem().GetCart().GetProducts();
-        double currentPrice = 0;
-        for(Product product:products)
-        {
-            double price = product.getPriceEuro() + product.getPriceCent()/100;
-            currentPrice+=price;
-        }
-        product_total.setText(currentPrice+"€");
+        this.RecalculateTotal();
 
         checkout_button.setOnClickListener(view->GoToCheckout());
 
@@ -55,5 +48,11 @@ public class CartActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CheckoutActivity.class);
         this.startActivity(intent);
     }
+
+    public void RecalculateTotal()
+    {
+        product_total.setText(ClientSystem.GetSystem().GetCart().CalculateCartTotal()+"€");
+    }
+
 
 }

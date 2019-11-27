@@ -23,4 +23,14 @@ public class Cart {
         return this.products;
     }
 
+    public float CalculateCartTotal()
+    {
+        float ret = 0;
+        for(Product product:this.products)
+        {
+            ret+=product.getPriceEuro() + product.getPriceCent()/100.0f;
+        }
+        return ret;
+    }
+
 }
