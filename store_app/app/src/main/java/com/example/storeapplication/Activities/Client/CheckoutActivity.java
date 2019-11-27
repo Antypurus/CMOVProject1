@@ -56,6 +56,8 @@ public class CheckoutActivity extends AppCompatActivity {
         checkout_code = findViewById(R.id.checkout_code);
         checkout_button = findViewById(R.id.checkout_button);
 
+        cost.setText(ClientSystem.GetSystem().GetCart().CalculateCartTotal()+"€");
+
         //fetch coupon list
         try {
             HashMap<String,String> headers = new HashMap<>();
