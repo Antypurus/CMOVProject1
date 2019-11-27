@@ -68,6 +68,8 @@ public class CheckoutActivity extends AppCompatActivity {
                             vouchers.add(vouchersJSON.getString(i));
                         }
                         checkout_button.setOnClickListener(view->GenerateCheckoutQRCode());
+
+                        GenerateCheckoutQRCode();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -89,8 +91,17 @@ public class CheckoutActivity extends AppCompatActivity {
             JSONObject body = new JSONObject();
             body.put("products", productsArray.toString());
             body.put("user_id", ClientSystem.GetSystem().ClientUserID);
-            body.put("use_discount", String.valueOf(this.use_accumulated.getShowText()));
-            String valueToSign = ClientSystem.GetSystem().ClientUserID + String.valueOf(this.use_accumulated.getShowText());
+            body.put("use_discount", String.valueOf(this.use_accumulated.isChecked()));
+            String voucher = "";
+            if (this.use_coupon.isChecked()) {
+                if (this.vouchers.size() > 0) {
+                    voucher = this.vouchers.get(0);
+                    JSONObject voucherJSON = new JSONObject(voucher);
+                    voucher = voucherJSON.getString("voucher_id");
+                    body.put("voucher_id", voucher);
+                }
+            }
+            String valueToSign = ClientSystem.GetSystem().ClientUserID + String.valueOf(this.use_accumulated.getShowText())+voucher;
             String sign = "";
             try {
                 sign = RSA.Sign(valueToSign, ClientSystem.GetSystem().ClientUsername);
@@ -98,14 +109,8 @@ public class CheckoutActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             body.put("sign", sign);
-            if (this.use_coupon.getShowText()) {
-                if (this.vouchers.size() > 0) {
-                    String voucher = this.vouchers.get(0);
-                    body.put("voucher_id", voucher);
-                }
-            }
-
             String data = body.toString();
+
             Bitmap QRCode = QR.GenerateQRCode(data);
             this.checkout_code.setImageBitmap(QRCode);
         }catch (Exception e)
