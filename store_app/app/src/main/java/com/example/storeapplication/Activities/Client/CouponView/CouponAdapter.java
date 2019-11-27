@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.storeapplication.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -42,7 +45,12 @@ public class CouponAdapter extends  RecyclerView.Adapter<CouponAdapter.CouponVie
 
     @Override
     public void onBindViewHolder(@NonNull CouponViewHolder holder, int position) {
-        holder.id.setText(this.vouchers.get(position));
+        try {
+            JSONObject voucherJSON = new JSONObject(this.vouchers.get(position));
+            holder.id.setText(voucherJSON.getString("voucher_id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
