@@ -2,6 +2,7 @@ package com.example.storeapplication.Activities.Client;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -96,8 +97,15 @@ public class CheckoutActivity extends AppCompatActivity {
             JSONObject body = new JSONObject();
             body.put("products", productsArray.toString());
             body.put("user_id", ClientSystem.GetSystem().ClientUserID);
-            body.put("use_discount", String.valueOf(this.use_accumulated.getShowText()));
-            String valueToSign = ClientSystem.GetSystem().ClientUserID + String.valueOf(this.use_accumulated.getShowText());
+            body.put("use_discount", String.valueOf(this.use_accumulated.isChecked()));
+            String voucher = "";
+            if (this.use_coupon.isChecked()) {
+                if (this.vouchers.size() > 0) {
+                    voucher = this.vouchers.get(0);
+                    body.put("voucher_id", voucher);
+                }
+            }
+            String valueToSign = ClientSystem.GetSystem().ClientUserID + String.valueOf(this.use_accumulated.getShowText())+voucher;
             String sign = "";
             try {
                 sign = RSA.Sign(valueToSign, ClientSystem.GetSystem().ClientUsername);
@@ -105,14 +113,8 @@ public class CheckoutActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             body.put("sign", sign);
-            if (this.use_coupon.getShowText()) {
-                if (this.vouchers.size() > 0) {
-                    String voucher = this.vouchers.get(0);
-                    body.put("voucher_id", voucher);
-                }
-            }
-
             String data = body.toString();
+
             Bitmap QRCode = QR.GenerateQRCode(data);
             this.checkout_code.setImageBitmap(QRCode);
         }catch (Exception e)
