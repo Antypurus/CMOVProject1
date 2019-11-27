@@ -133,6 +133,7 @@ namespace Server.Controllers
             if (data.ContainsKey("voucher_id"))
             {
                 voucher_id_string = data["voucher_id"].ToString();
+                Logger.LogInfo(voucher_id_string, "Root");
                 bool valid = Voucher.isVoucherAvailable(voucher_id_string);
                 if (!valid)
                 {
@@ -182,13 +183,14 @@ namespace Server.Controllers
             // figure out if voucher should be generated
             bool generateVoucher = false;
             int vouchersToGenerate = 0;
-            KeyValuePair<int, int> spent = Client.GetTotalAmmountSpent(user_id);
-            float hundredsSpent = MathF.Truncate(spent.Key / 100.0f);
-            float totalAmmountSpent = spent.Key + spent.Value / 100.0f;
-            totalAmmountSpent += final_price;
-            float newHundredsSpent = MathF.Truncate(totalAmmountSpent);
 
-            if (!newHundredsSpent.Equals(hundredsSpent))
+            KeyValuePair<int, int> spent = Client.GetTotalAmmountSpent(user_id);
+            float current_ammount_spent  = (float)spent.Key + spent.Value / 100.0f;
+            float hundredsSpent = MathF.Truncate(current_ammount_spent/100.0f);
+            float totalAmmountSpent = current_ammount_spent + final_price;
+            float newHundredsSpent = MathF.Truncate(totalAmmountSpent/100.0f);
+
+            if (newHundredsSpent > hundredsSpent)
             {
                 generateVoucher = true;
                 vouchersToGenerate = (int)(newHundredsSpent - hundredsSpent);

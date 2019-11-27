@@ -76,6 +76,8 @@ public class CheckoutActivity extends AppCompatActivity {
                             vouchers.add(vouchersJSON.getString(i));
                         }
                         checkout_button.setOnClickListener(view->GenerateCheckoutQRCode());
+
+                        GenerateCheckoutQRCode();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -102,6 +104,8 @@ public class CheckoutActivity extends AppCompatActivity {
             if (this.use_coupon.isChecked()) {
                 if (this.vouchers.size() > 0) {
                     voucher = this.vouchers.get(0);
+                    JSONObject voucherJSON = new JSONObject(voucher);
+                    voucher = voucherJSON.getString("voucher_id");
                     body.put("voucher_id", voucher);
                 }
             }
