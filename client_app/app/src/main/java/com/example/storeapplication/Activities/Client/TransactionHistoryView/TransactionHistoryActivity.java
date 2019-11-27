@@ -50,14 +50,14 @@ public class TransactionHistoryActivity extends AppCompatActivity {
                         for(int i=0;i<transactionsJSON.length();++i)
                         {
                             ArrayList<Product> products = new ArrayList<>();
-                            JSONObject transactionJSON = new JSONObject((String) transactionsJSON.get(i));
+                            JSONObject transactionJSON = (JSONObject) transactionsJSON.get(i);
                             String transaction_id = transactionJSON.getString("transaction_id");
                             String client_id = transactionJSON.getString("client_id");
                             boolean was_discounter = transactionJSON.getBoolean("was_discounted");
                             JSONArray productsJSON = new JSONArray((String)transactionJSON.getString("products"));
-                            for(int prod = 0;prod<productsJSON.length();++i)
+                            for(int prod = 0;prod<productsJSON.length();++prod)
                             {
-                                String productJSON = (String) productsJSON.get(prod);
+                                String productJSON = productsJSON.get(prod).toString();
                                 Product product = new Product(productJSON);
                                 products.add(product);
                             }

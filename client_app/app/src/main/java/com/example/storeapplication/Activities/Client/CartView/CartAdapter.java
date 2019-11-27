@@ -22,9 +22,11 @@ import DataModels.Product;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder>{
 
     private CopyOnWriteArrayList<Product> products;
+    private CartActivity activity;
 
-    public CartAdapter(CopyOnWriteArrayList<Product> products)
+    public CartAdapter(CopyOnWriteArrayList<Product> products, CartActivity activity)
     {
+        this.activity = activity;
         this.products = products;
     }
 
@@ -51,6 +53,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             ClientSystem.GetSystem().GetCart().RemoveProduct(this.product);
             notifyItemRemoved(getAdapterPosition());
             notifyItemRangeChanged(getAdapterPosition(),products.size());
+            activity.RecalculateTotal();
         }
 
         private void OpenProduct()

@@ -1,5 +1,6 @@
 package DataModels;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.SharedPreferences;
 
@@ -11,34 +12,34 @@ public class ClientSystem extends Application {
     private Cart cart;
     private static ClientSystem system = null;
 
-    public ClientSystem(String username)
+    public ClientSystem(String username, Activity activity)
     {
         this.cart = new Cart();
         this.ClientUsername = username;
-        this.fetchUserData();
-        this.Login();
+        this.fetchUserData(activity);
+        this.Login(activity);
         system = this;
     }
 
-    private void Login()
+    private void Login(Activity activity)
     {
-        SharedPreferences preferences = getSharedPreferences("Current_User",MODE_PRIVATE);
+        SharedPreferences preferences = activity.getSharedPreferences("Current_User",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Current_Username",this.ClientUsername);
         editor.apply();
     }
 
-    public void Logout()
+    public void Logout(Activity activity)
     {
-        SharedPreferences preferences = getSharedPreferences("Current_User",MODE_PRIVATE);
+        SharedPreferences preferences = activity.getSharedPreferences("Current_User",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Current_Username","");
         editor.apply();
     }
 
-    private void fetchUserData()
+    private void fetchUserData(Activity activity)
     {
-        SharedPreferences preferences = getSharedPreferences(this.ClientUsername,MODE_PRIVATE);
+        SharedPreferences preferences = activity.getSharedPreferences(ClientUsername,MODE_PRIVATE);
         this.ServerKey = preferences.getString("Server_Key","");
         this.ClientUserID = preferences.getString("user_id","");
     }

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.example.clientapplicaton.R;
 
 import org.json.JSONArray;
@@ -14,10 +15,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import Common.Constants;
 import Common.HTTP.HTTP;
 import Common.HTTP.HTTPResultHandler;
+import DataModels.ClientSystem;
 
 public class CouponActivity extends AppCompatActivity {
 
@@ -36,7 +39,9 @@ public class CouponActivity extends AppCompatActivity {
         couponList.setLayoutManager(layoutManager);
 
         try {
-            HTTP.GetRequest(Constants.Coupon_List_Route, null, new HTTPResultHandler() {
+            HashMap<String,String> headers = new HashMap<>();
+            headers.put("user_id", ClientSystem.GetSystem().ClientUserID);
+            HTTP.GetRequest(Constants.Coupon_List_Route, headers, new HTTPResultHandler() {
                 @Override
                 public void Handler(Object result) {
                     // parse the voucher list data

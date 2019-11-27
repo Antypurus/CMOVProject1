@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import Common.Constants;
@@ -48,9 +49,13 @@ public class CheckoutActivity extends AppCompatActivity {
         checkout_code = findViewById(R.id.checkout_code);
         checkout_button = findViewById(R.id.checkout_button);
 
+        cost.setText(ClientSystem.GetSystem().GetCart().CalculateCartTotal()+"€");
+
         //fetch coupon list
         try {
-            HTTP.GetRequest(Constants.Coupon_List_Route, null, new HTTPResultHandler() {
+            HashMap<String,String> headers = new HashMap<>();
+            headers.put("user_id", ClientSystem.GetSystem().ClientUserID);
+            HTTP.GetRequest(Constants.Coupon_List_Route, headers, new HTTPResultHandler() {
                 @Override
                 public void Handler(Object result) {
                     // parse the voucher list data

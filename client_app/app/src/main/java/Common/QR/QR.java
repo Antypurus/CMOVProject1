@@ -57,6 +57,7 @@ public class QR extends Application {
                 Toast.makeText(activity, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 this.handler.Handler(result.getContents());
+                Toast.makeText(activity, "Product Added to Cart", Toast.LENGTH_LONG).show();
             }
         }
     }

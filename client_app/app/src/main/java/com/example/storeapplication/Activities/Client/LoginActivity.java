@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = password_view.getText().toString();
         if(isLoginValid(username,password))
         {
-            ClientSystem system = new ClientSystem(username);
+            ClientSystem system = new ClientSystem(username, this);
             Intent intent = new Intent(this,MainMenuActivity.class);
             this.startActivity(intent);
         }else

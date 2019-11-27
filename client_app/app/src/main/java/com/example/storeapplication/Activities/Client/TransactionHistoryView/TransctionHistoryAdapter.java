@@ -37,8 +37,9 @@ public class TransctionHistoryAdapter extends RecyclerView.Adapter<TransctionHis
 
         private void OpenTransaction()
         {
-            Intent intent = new Intent(this.itemView.getContext(),TransactionViewActivity.class);
+            Intent intent = new Intent(this.itemView.getContext(), TransactionViewActivity.class);
             intent.putExtra("products",this.transaction.products);
+            intent.putExtra("id",this.transaction.id);
             this.itemView.getContext().startActivity(intent);
         }
 

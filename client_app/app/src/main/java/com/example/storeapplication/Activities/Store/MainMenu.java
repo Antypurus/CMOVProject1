@@ -1,9 +1,11 @@
 package com.example.storeapplication.Activities.Store;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.clientapplicaton.R;
 import com.example.storeapplication.Activities.Store.ProductList.ProductListActivity;
@@ -39,13 +41,16 @@ public class MainMenu extends QRActivity {
 
     @Override
     public void Handler(String data) {
+        Activity activity = this;
         HTTP.PostRequest(Constants.Checkout_Route, null, data, new HTTPResultHandler() {
             @Override
             public void Handler(Object result) {
                 if ((boolean) result) {
                     resultView.setText("Transaction Complete");
+                    Toast.makeText(activity,"Transaction Complete",Toast.LENGTH_LONG).show();
                 } else {
                     resultView.setText("Transaction Failed");
+                    Toast.makeText(activity,"Transaction Failed",Toast.LENGTH_LONG).show();
                 }
             }
         });

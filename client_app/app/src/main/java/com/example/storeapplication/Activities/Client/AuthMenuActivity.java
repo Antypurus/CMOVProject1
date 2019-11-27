@@ -33,21 +33,21 @@ public class AuthMenuActivity extends AppCompatActivity {
         String current = preferences.getString("Current_Username","");
         if(!current.equals(""))
         {
-            ClientSystem system = new ClientSystem(current);
-            Intent intent = new Intent(this,MainMenuActivity.class);
+            ClientSystem system = new ClientSystem(current,this);
+            Intent intent = new Intent(this, MainMenuActivity.class);
             this.startActivity(intent);
         }
     }
 
     public void ToRegister()
     {
-        Intent intent = new Intent(this,RegisterActivity.class);
+        Intent intent = new Intent(this, RegisterActivity.class);
         this.startActivity(intent);
     }
 
     public void ToLogin()
     {
-        Intent intent = new Intent(this,LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         this.startActivity(intent);
     }
 

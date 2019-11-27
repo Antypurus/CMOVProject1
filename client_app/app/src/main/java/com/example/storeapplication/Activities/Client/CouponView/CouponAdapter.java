@@ -9,7 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.example.clientapplicaton.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -41,7 +45,12 @@ public class CouponAdapter extends  RecyclerView.Adapter<CouponAdapter.CouponVie
 
     @Override
     public void onBindViewHolder(@NonNull CouponViewHolder holder, int position) {
-        holder.id.setText(this.vouchers.get(position));
+        try {
+            JSONObject voucherJSON = new JSONObject(this.vouchers.get(position));
+            holder.id.setText(voucherJSON.getString("voucher_id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

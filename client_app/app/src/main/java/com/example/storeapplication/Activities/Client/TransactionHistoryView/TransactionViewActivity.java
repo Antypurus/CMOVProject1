@@ -28,9 +28,12 @@ public class TransactionViewActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         products = (ArrayList<Product>)b.getSerializable("products");
+        String id = (String)b.getSerializable("id");
 
         header = findViewById(R.id.transaction_id);
         productList = findViewById(R.id.products);
+
+        header.setText(id);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         TransactionAdapter adapter = new TransactionAdapter(products);

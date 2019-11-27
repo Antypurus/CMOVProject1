@@ -1,5 +1,6 @@
 package com.example.storeapplication.Activities.Client;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -77,6 +78,8 @@ public class RegisterActivity extends AppCompatActivity {
             body.put("credit_card_no", credit_card_noS);
             body.put("public_key", RSA.getPublicKey(usernameS));
             SharedPreferences sharedPreferences = this.getSharedPreferences(usernameS, MODE_PRIVATE);
+
+            Activity activity = this;
             HTTP.PostRequest(Constants.Register_Route, null, body, new HTTPResultHandler() {
                 @Override
                 public void Handler(Object result) {
@@ -85,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                         String key = response.getString("server_key");
                         String user_id = response.getString("user_id");
                         SaveUserData(sharedPreferences,usernameS,passwordS,key,user_id);
-                        ClientSystem system = new ClientSystem(usernameS);
+                        ClientSystem system = new ClientSystem(usernameS,activity);
                         ToMainMenu();
                     } catch (Exception e) {
                         e.printStackTrace();

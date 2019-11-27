@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.clientapplicaton.R;
 import com.example.storeapplication.Activities.Client.AuthMenuActivity;
-import com.example.storeapplication.Activities.Store.MainMenu;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, MainMenu.class);
+        Intent intent = new Intent(this, AuthMenuActivity.class);
         startActivity(intent);
     }
 
